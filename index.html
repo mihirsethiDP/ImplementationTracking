@@ -319,6 +319,36 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 .toast.good{background:var(--client);}
 .toast.err{background:var(--flag);}
 @keyframes toastIn{from{transform:translateY(14px);opacity:0;}to{transform:none;opacity:1;}}
+
+/* ── Lifecycle (Phase 2) ── */
+.stage-pill{font-family:var(--mono);font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+.stage-pill .sd{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.funnel{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:760px){.funnel{grid-template-columns:repeat(2,1fr);}}
+.fn-step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;cursor:pointer;transition:.14s;position:relative;border-left:4px solid var(--sc,var(--line));box-shadow:var(--shadow-sm);}
+.fn-step:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.fn-step.active{outline:2px solid var(--sc);outline-offset:1px;}
+.fn-step .fn-n{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--sc);}
+.fn-step .fn-l{font-size:12.5px;font-weight:700;margin-top:2px;}
+.fn-step .fn-d{font-size:10.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4;}
+.fn-step .fn-bar{height:5px;border-radius:4px;background:var(--line-soft);overflow:hidden;margin-top:9px;}
+.fn-step .fn-fill{height:100%;border-radius:4px;background:var(--sc);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1);}
+.fn-step .fn-arrow{position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:#c7d2e0;font-size:15px;z-index:1;background:var(--paper);}
+@media(max-width:760px){.fn-step .fn-arrow{display:none;}}
+/* stepper on plant page */
+.stepper{display:flex;align-items:center;margin:4px 0;flex-wrap:wrap;gap:4px 0;}
+.step{display:flex;align-items:center;gap:8px;}
+.step .sc{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);font-weight:700;background:var(--line-soft);color:var(--ink-faint);border:2px solid var(--line);}
+.step.done .sc{background:var(--good);color:#fff;border-color:var(--good);}
+.step.current .sc{background:var(--cc);color:#fff;border-color:var(--cc);box-shadow:0 0 0 4px var(--ccp);}
+.step .st-l{font-size:11px;font-weight:600;color:var(--ink-faint);}
+.step.done .st-l{color:var(--ink-soft);}
+.step.current .st-l{color:var(--ink);font-weight:700;}
+.step-line{width:24px;height:2px;background:var(--line);margin:0 6px;}
+.step-line.done{background:var(--good);}
+.nba{background:var(--gold-pale);border:1px solid #ecd9a8;border-radius:var(--r-sm);padding:12px 16px;font-size:12.5px;color:#6b540f;margin:14px 0 4px;}
+.nba b{color:#4d3d09;}
+.md-stage{font-family:var(--mono);font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:5px;}
 </style>
 </head>
 <body>
@@ -385,6 +415,7 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
       </div>
       <div class="advanced" id="advanced">
         <div class="adv-field"><label>Workspace</label><select id="workspaceFilter"><option value="">All workspaces</option></select></div>
+        <div class="adv-field"><label>Stage</label><select id="stageFilter"><option value="">All stages</option></select></div>
         <div class="adv-field"><label>Module</label><select id="moduleFilter"><option value="">All modules</option></select></div>
         <div class="adv-field"><label>Feature</label><select id="featureFilter"><option value="">All features</option></select></div>
         <div class="adv-field"><label>Report frequency</label><select id="reportFreqFilter"><option value="">Any</option><option>Daily</option><option>Weekly</option><option>Monthly</option><option>All</option><option>None</option></select></div>
@@ -397,6 +428,11 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
         <span class="li"><span class="lockmark">🔒</span>Not licensed (upsell)</span>
       </div>
     </div>
+
+    <section class="section">
+      <div class="section-head"><h3>Implementation pipeline</h3><span class="hint">every plant's rollout stage · click to filter</span></div>
+      <div class="funnel" id="funnel"></div>
+    </section>
 
     <section class="section">
       <div class="section-head"><h3>Adoption by product module</h3><span class="hint">among plants licensed for each module</span></div>
@@ -475,9 +511,19 @@ const FEATURES = [
 const activeFeatures = FEATURES.filter(f=>f.status!=="retired");
 const TYPE_LABEL = {cross:"cross-module", entitlement:"hardware"};
 
+// ── Implementation lifecycle (Phase 2) ──
+const STAGES = [
+  {id:"not_started", n:"Not started", c:"var(--flag)",   pale:"var(--flag-pale)",   d:"Licensed — nothing switched on yet"},
+  {id:"in_progress", n:"In progress", c:"var(--gold)",   pale:"var(--gold-pale)",   d:"Some licensed features live"},
+  {id:"live",        n:"Live",        c:"var(--good)",    pale:"var(--client-pale)", d:"All licensed features switched on"},
+  {id:"healthy",     n:"Healthy",     c:"#1a7a4a",        pale:"#d9efe2",            d:"Live and actively used"},
+];
+const stageById = Object.fromEntries(STAGES.map(s=>[s.id,s]));
+const stageIndex = Object.fromEntries(STAGES.map((s,i)=>[s.id,i]));
+
 // ══════════ State ══════════
 let records=[], editMode=false, isAdmin=false, prevPage=null;
-let state={search:"", workspace:"", module:"", feature:"", reportFreq:"", preset:"all"};
+let state={search:"", workspace:"", module:"", feature:"", reportFreq:"", stage:"", preset:"all"};
 
 // ══════════ Helpers ══════════
 function pct(n,d){ return d?Math.round((n/d)*1000)/10:0; }
@@ -517,6 +563,48 @@ function covPct(r){ return pct(adoptedCount(r), denomCount(r)); }
 function gapCount(r){ return statesOf(r).filter(x=>x.s==="gap").length; }
 function upsellMods(r){ const lic=entitlement(r); return SELLABLE.filter(m=>!lic.has(m)); }
 function isFull(r){ return denomCount(r)>0 && adoptedCount(r)===denomCount(r); }
+// MOCK usage/health signal — replace with PostHog "active in last 30d" (Phase 4)
+function mockHealthy(r){ return (hashStr((r.plant||"")+"|health")%100) < 62; }
+const flocFeat = FEATURES.find(f=>f.key==="Floc Detector");
+// Pipeline stage = rollout BREADTH: how many licensed modules have been provisioned
+// (≥1 feature switched on). Depth (which features) is the adoption % / coverage ring.
+function plantModulesState(r){
+  let prov=0, tot=0;
+  MODULES.forEach(m=>{
+    const licensed = m.id==="floc" ? onFlag(r,flocFeat) : (m.always || entitlement(r).has(m.id));
+    if(!licensed) return;
+    tot++;
+    const on = m.id==="floc" ? onFlag(r,flocFeat) : activeFeatures.filter(f=>f.grp===m.id).some(f=>onFlag(r,f));
+    if(on) prov++;
+  });
+  return {prov,tot};
+}
+function stageOf(r){
+  const {prov,tot}=plantModulesState(r);
+  if(prov===0) return "not_started";
+  if(prov<tot) return "in_progress";
+  return mockHealthy(r) ? "healthy" : "live";
+}
+function isLive(r){ const s=stageOf(r); return s==="live"||s==="healthy"; }
+function moduleStage(r,m){
+  if(m.id==="floc") return onFlag(r,FEATURES.find(f=>f.key==="Floc Detector")) ? "live" : "not_started";
+  if(!(m.always || entitlement(r).has(m.id))) return "not_licensed";
+  const feats=activeFeatures.filter(f=>f.grp===m.id);
+  let ad=0,dn=0; feats.forEach(f=>{ const s=featState(r,f); if(s==="adopted"){ad++;dn++;} else if(s==="gap")dn++; });
+  if(dn===0) return "live";
+  if(ad===0) return "not_started";
+  if(ad<dn) return "in_progress";
+  return mockHealthy(r) ? "healthy" : "live";
+}
+function nextBestFeatures(r){ return statesOf(r).filter(x=>x.s==="gap").map(x=>x.f.short); }
+function unprovisionedModules(r){
+  return MODULES.filter(m=>{
+    const licensed = m.id==="floc" ? onFlag(r,flocFeat) : (m.always||entitlement(r).has(m.id));
+    if(!licensed) return false;
+    const on = m.id==="floc" ? onFlag(r,flocFeat) : activeFeatures.filter(f=>f.grp===m.id).some(f=>onFlag(r,f));
+    return !on;
+  }).map(m=>m.n);
+}
 
 function ring(pctVal,size,stroke,color,track){
   const rr=(size-stroke)/2, c=2*Math.PI*rr, off=c*(1-pctVal/100);
@@ -559,6 +647,7 @@ function populateControls(){
   const wsSet=[...new Set(records.map(r=>r.workspace))].sort();
   document.getElementById("workspaceFilter").innerHTML='<option value="">All workspaces</option>'+wsSet.map(w=>`<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("");
   document.getElementById("moduleFilter").innerHTML='<option value="">All modules</option>'+MODULES.map(m=>`<option value="${m.id}">${m.icon} ${escHtml(m.n)}</option>`).join("");
+  document.getElementById("stageFilter").innerHTML='<option value="">All stages</option>'+STAGES.map(s=>`<option value="${s.id}">${escHtml(s.n)}</option>`).join("");
   document.getElementById("featureFilter").innerHTML='<option value="">All features</option>'+activeFeatures.map(f=>`<option value="${escHtml(f.key)}">${escHtml(f.short)}</option>`).join("");
   document.getElementById("topMeta").textContent=`${records.length} plants · ${wsSet.length} workspaces`;
 }
@@ -569,14 +658,15 @@ function baseFiltered(){
     if(state.module && !entitlement(r).has(state.module)) return false;
     if(state.feature){ const f=FEATURES.find(x=>x.key===state.feature); if(f && !onFlag(r,f)) return false; }
     if(state.reportFreq && r.reportsType!==state.reportFreq) return false;
+    if(state.stage && stageOf(r)!==state.stage) return false;
     if(q && !(r.plant.toLowerCase().includes(q) || (r.workspace||"").toLowerCase().includes(q))) return false;
     return true;
   });
 }
 function applyPreset(rows){
-  if(state.preset==="gaps")   return rows.filter(r=>gapCount(r)>0);
-  if(state.preset==="full")   return rows.filter(r=>isFull(r));
-  if(state.preset==="upsell") return rows.filter(r=>upsellMods(r).length>0);
+  if(state.preset==="worklist") return rows.filter(r=>["not_started","in_progress"].includes(stageOf(r)));
+  if(state.preset==="full")     return rows.filter(r=>isLive(r));
+  if(state.preset==="upsell")   return rows.filter(r=>upsellMods(r).length>0);
   return rows;
 }
 function getFiltered(){ return applyPreset(baseFiltered()); }
@@ -585,7 +675,7 @@ function getFiltered(){ return applyPreset(baseFiltered()); }
 function render(){
   renderHero(); renderPresets();
   const f=getFiltered();
-  renderModules(f); renderFeatures(f); renderTable(f); renderFoot(f);
+  renderFunnel(f); renderModules(f); renderFeatures(f); renderTable(f); renderFoot(f);
   animateBars(); animateRings();
 }
 
@@ -601,7 +691,7 @@ function renderHero(){
   const gapPlants=all.filter(r=>gapCount(r)>0).length;
   const totalGaps=all.reduce((s,r)=>s+gapCount(r),0);
   document.getElementById("kpiGap").innerHTML=`<span class="kpi-ic">⚠️</span><div class="kpi-num">${totalGaps}</div><div class="kpi-txt"><div class="kpi-lbl">Adoption gaps</div><div class="kpi-sub">licensed-but-off · across ${gapPlants} plants → CS/Implementation</div></div>`;
-  document.getElementById("kpiGap").onclick=()=>{ setPreset("gaps"); scrollToTable(); };
+  document.getElementById("kpiGap").onclick=()=>{ setPreset("worklist"); scrollToTable(); };
 
   const upsellPlants=all.filter(r=>upsellMods(r).length>0).length;
   const totalUpsell=all.reduce((s,r)=>s+upsellMods(r).length,0);
@@ -611,11 +701,29 @@ function renderHero(){
 
 function renderPresets(){
   const base=baseFiltered();
-  const counts={ all:base.length, gaps:base.filter(r=>gapCount(r)>0).length, full:base.filter(r=>isFull(r)).length, upsell:base.filter(r=>upsellMods(r).length>0).length };
-  const defs=[ {k:"all",l:"All plants",c:""},{k:"gaps",l:"Has gaps",c:"attn"},{k:"full",l:"Fully adopted 🏆",c:""},{k:"upsell",l:"Upsell targets 🛒",c:""} ];
+  const counts={ all:base.length, worklist:base.filter(r=>["not_started","in_progress"].includes(stageOf(r))).length, full:base.filter(r=>isLive(r)).length, upsell:base.filter(r=>upsellMods(r).length>0).length };
+  const defs=[ {k:"all",l:"All plants",c:""},{k:"worklist",l:"Rollout worklist 🛠",c:"attn"},{k:"full",l:"Live 🏆",c:""},{k:"upsell",l:"Upsell targets 🛒",c:""} ];
   document.getElementById("presets").innerHTML=defs.map(d=>`<button class="preset ${d.c} ${state.preset===d.k?"active":""}" onclick="setPreset('${d.k}')">${d.l} <span class="cnt">${counts[d.k]}</span></button>`).join("");
 }
-function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; render(); }
+function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; if(state.preset!=="all") state.stage=""; render(); }
+
+// lifecycle pipeline
+function renderFunnel(rows){
+  const counts=Object.fromEntries(STAGES.map(s=>[s.id,0]));
+  rows.forEach(r=>counts[stageOf(r)]++);
+  const total=rows.length||1;
+  document.getElementById("funnel").innerHTML=STAGES.map((s,i)=>{
+    const n=counts[s.id], last=i===STAGES.length-1;
+    return `<div class="fn-step ${state.stage===s.id?"active":""}" style="--sc:${s.c}" onclick="setStage('${s.id}')">
+      ${!last?'<span class="fn-arrow">→</span>':''}
+      <div class="fn-n">${n}</div>
+      <div class="fn-l">${s.n}</div>
+      <div class="fn-d">${s.d}</div>
+      <div class="fn-bar"><div class="fn-fill" data-w="${pct(n,total)}"></div></div>
+    </div>`;
+  }).join("");
+}
+function setStage(id){ state.stage=state.stage===id?"":id; state.preset="all"; const sf=document.getElementById("stageFilter"); if(sf) sf.value=state.stage; render(); scrollToTable(); }
 
 // module-level adoption
 function moduleStats(rows,m){
@@ -689,11 +797,11 @@ function renderTable(rows){
   // grouped header
   const groups=[]; let cur=null;
   cols.forEach(f=>{ if(!cur||cur.grp!==f.grp){ cur={grp:f.grp,n:1}; groups.push(cur);} else cur.n++; });
-  const groupRow=`<tr class="groups"><th class="blank" colspan="2"></th>${groups.map(g=>`<th colspan="${g.n}" style="background:${modColor(g.grp)}" title="${escHtml(modById[g.grp].n)}">${modById[g.grp].icon}</th>`).join("")}<th class="blank"></th></tr>`;
-  const colRow=`<tr><th>Plant</th><th>Workspace</th>${cols.map((f,i)=>{ const div=(i>0&&cols[i-1].grp!==f.grp)?"group-div":""; return `<th class="center ${div}" title="${escHtml(f.key)}">${escHtml(f.short)}</th>`; }).join("")}<th class="center group-div">Coverage</th></tr>`;
+  const groupRow=`<tr class="groups"><th class="blank" colspan="3"></th>${groups.map(g=>`<th colspan="${g.n}" style="background:${modColor(g.grp)}" title="${escHtml(modById[g.grp].n)}">${modById[g.grp].icon}</th>`).join("")}<th class="blank"></th></tr>`;
+  const colRow=`<tr><th>Plant</th><th>Workspace</th><th>Stage</th>${cols.map((f,i)=>{ const div=(i>0&&cols[i-1].grp!==f.grp)?"group-div":""; return `<th class="center ${div}" title="${escHtml(f.key)}">${escHtml(f.short)}</th>`; }).join("")}<th class="center group-div">Coverage</th></tr>`;
   document.getElementById("tableHead").innerHTML=groupRow+colRow;
 
-  if(!rows.length){ document.getElementById("tableBody").innerHTML=`<tr><td colspan="${cols.length+3}"><div class="no-results"><div class="big">🔍</div>No plants match your filters.</div></td></tr>`; return; }
+  if(!rows.length){ document.getElementById("tableBody").innerHTML=`<tr><td colspan="${cols.length+4}"><div class="no-results"><div class="big">🔍</div>No plants match your filters.</div></td></tr>`; return; }
 
   document.getElementById("tableBody").innerHTML=rows.map(r=>{
     const ad=adoptedCount(r), dn=denomCount(r), cp=pct(ad,dn), full=isFull(r);
@@ -714,9 +822,11 @@ function renderTable(rows){
       }
       return `<td class="center ${div}">${inner}</td>`;
     }).join("");
+    const stg=stageById[stageOf(r)];
     return `<tr>
       <td class="plant-name"><span class="clickable" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span><span class="save-indicator" id="si-${r.rowIndex}"></span></td>
       <td class="ws-name"><span class="clickable-ws" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span></td>
+      <td><span class="stage-pill" style="background:${stg.pale};color:${stg.c}"><span class="sd"></span>${stg.n}</span></td>
       ${cells}
       <td class="center group-div"><div class="cov"><div class="cov-bar"><div class="cov-fill ${full?"full":""}" data-w="${cp}"></div></div><span class="cov-txt ${full?"full":""}">${ad}/${dn}</span></div></td>
     </tr>`;
@@ -727,8 +837,8 @@ function renderFoot(rows){
   document.getElementById("tableCount").textContent=`${rows.length} of ${records.length} plants`;
   const ad=rows.reduce((s,r)=>s+adoptedCount(r),0), dn=rows.reduce((s,r)=>s+denomCount(r),0);
   document.getElementById("tableFoot").textContent=`Showing ${rows.length} plants · ${pct(ad,dn)}% of licensed features adopted · coverage = adopted ÷ licensed · sorted high → low`;
-  const full=records.filter(r=>isFull(r)).length;
-  document.getElementById("footMsg").innerHTML= records.length ? `<b>${full}</b> of <b>${records.length}</b> plants have adopted everything they're licensed for. 🌱` : "—";
+  const live=records.filter(r=>isLive(r)).length;
+  document.getElementById("footMsg").innerHTML= records.length ? `<b>${live}</b> of <b>${records.length}</b> plants have rolled out every module they're licensed for. 🌱` : "—";
 }
 
 // ══════════ Navigation ══════════
@@ -746,11 +856,13 @@ function renderWorkspacePage(ws){
   const cards=[...list].sort((a,b)=>covPct(b)-covPct(a)).map(r=>{
     const a=adoptedCount(r), d=denomCount(r), cp=pct(a,d), full=isFull(r);
     const dots=activeFeatures.map(f=>{ const s=featState(r,f); const bg=s==="adopted"?modColor(f.grp):(s==="gap"?"var(--flag)":(s==="locked"?"var(--lock)":"#d5deea")); return `<span class="pcd" style="background:${bg}" title="${escHtml(f.short)}: ${s}"></span>`; }).join("");
+    const stg=stageById[stageOf(r)];
     return `<div class="plant-card ${full?"full":""}" onclick="goPlant(${r.rowIndex},true)">${full?'<span class="pc-crown">🏆</span>':''}
       <div class="pc-name">${escHtml(r.plant)}</div>
       <div class="pc-bar"><div class="pc-fill ${full?"full":""}" data-w="${cp}"></div></div>
       <div class="pc-meta"><span>${a}/${d} adopted</span><span>${cp}%</span></div>
-      <div class="pc-dots">${dots}</div></div>`;
+      <div class="pc-dots">${dots}</div>
+      <div style="margin-top:10px"><span class="stage-pill" style="background:${stg.pale};color:${stg.c}"><span class="sd"></span>${stg.n}</span></div></div>`;
   }).join("");
   document.getElementById("wsContent").innerHTML=`
     <div class="dd-header"><div class="dd-eyebrow">Workspace</div><h2 class="dd-name">${escHtml(ws)}</h2>
@@ -790,11 +902,26 @@ function renderPlantPage(r,fromWs){
       const tt=f.type!=="gated"?`<span class="type-tag">${TYPE_LABEL[f.type]}</span>`:"";
       return `<div class="fr"><span class="fr-name">${escHtml(f.short)}${tt}</span>${badge}</div>`;
     }).join("");
+    const ms=moduleStage(r,m);
+    const stageChip = (licensed && ms!=="not_licensed") ? `<span class="md-stage" style="background:${stageById[ms].pale};color:${stageById[ms].c}">${stageById[ms].n}</span>` : `<span class="md-lic off">NOT LICENSED</span>`;
     return `<div class="md-card ${licensed?"":"locked"}" style="--g:${modColor(m.id)};--gp:var(--m-${m.id}-pale)">
-      <div class="md-head"><span>${m.icon} ${escHtml(m.n)}</span><span class="md-lic ${licensed?"on":"off"}">${licensed?"LICENSED":"NOT LICENSED"}</span></div>
+      <div class="md-head"><span>${m.icon} ${escHtml(m.n)}</span>${stageChip}</div>
       <div class="md-body">${rowsHtml}</div></div>`;
   }).join("");
 
+  const stg=stageOf(r), sIdx=stageIndex[stg];
+  const stepper=`<div class="stepper">`+STAGES.map((s,i)=>{
+    const cls=i<sIdx?"done":(i===sIdx?"current":"");
+    const mark=i<sIdx?"✓":(i+1);
+    const line=i>0?`<div class="step-line ${i<=sIdx?"done":""}"></div>`:"";
+    return `${line}<div class="step ${cls}" style="--cc:${s.c};--ccp:${s.pale}"><span class="sc">${mark}</span><span class="st-l">${s.n}</span></div>`;
+  }).join("")+`</div>`;
+  const unprov=unprovisionedModules(r), gapsN=gapCount(r);
+  let nba;
+  if(stg==="not_started") nba=`🚀 <b>Kick off this plant.</b> No modules provisioned yet — start with <b>${unprov.slice(0,3).join(", ")}</b>${unprov.length>3?` +${unprov.length-3} more`:""}.`;
+  else if(stg==="in_progress") nba=`🛠 <b>${unprov.length} module${unprov.length===1?"":"s"} to reach Live:</b> ${unprov.slice(0,4).join(", ")}${unprov.length>4?` +${unprov.length-4} more`:""}.${gapsN?` Then close <b>${gapsN}</b> feature gap${gapsN===1?"":"s"} for full depth.`:""}`;
+  else if(stg==="live") nba=`📈 <b>All licensed modules are live.</b>${gapsN?` <b>${gapsN}</b> feature gap${gapsN===1?"":"s"} remain for full depth.`:""} Next: confirm real usage to reach <b>Healthy</b> (usage data — PostHog, Phase 4).`;
+  else nba=`🎉 <b>Healthy.</b> Every licensed module rolled out and actively used — the benchmark for every other plant.`;
   document.getElementById("plantContent").innerHTML=`
     <div class="dd-header"><div class="dd-eyebrow">${escHtml(r.workspace)}</div><h2 class="dd-name">${escHtml(r.plant)} ${full?"🏆":""}</h2>
       <div class="dd-stat-row">
@@ -803,6 +930,9 @@ function renderPlantPage(r,fromWs){
         <div class="dd-stat"><div class="n">${ups.length}</div><div class="l">Modules to upsell</div></div>
         <div class="dd-stat"><div class="n">${r.reportsType}</div><div class="l">Report cadence</div></div>
       </div></div>
+    <div class="cov-ring-wrap">
+      <div style="flex:1 1 100%"><div class="ci-title" style="margin-bottom:8px">Implementation stage</div>${stepper}<div class="nba">${nba}</div></div>
+    </div>
     <div class="cov-ring-wrap">
       <div class="cov-ring">${ring(cp,88,9,full?"var(--gold)":"var(--good)","var(--line-soft)")}<div class="cr-label">${cp}%</div></div>
       <div class="cov-info">
@@ -852,10 +982,10 @@ document.getElementById("authModal").addEventListener("click",function(e){ if(e.
 // ══════════ CSV ══════════
 function exportCSV(){
   const rows=getFiltered();
-  const head=["plant","workspace","licensed_modules","adopted","licensed_total","coverage_pct","gaps","upsell_modules",...activeFeatures.map(f=>f.short+"_state")];
+  const head=["plant","workspace","stage","licensed_modules","adopted","licensed_total","coverage_pct","gaps","upsell_modules",...activeFeatures.map(f=>f.short+"_state")];
   const body=rows.map(r=>{
     const lic=[...entitlement(r)].filter(m=>m!=="core");
-    const base=[`"${(r.plant||"").replace(/"/g,'""')}"`,`"${(r.workspace||"").replace(/"/g,'""')}"`,`"${lic.join(" ")}"`,adoptedCount(r),denomCount(r),covPct(r),gapCount(r),`"${upsellMods(r).join(" ")}"`];
+    const base=[`"${(r.plant||"").replace(/"/g,'""')}"`,`"${(r.workspace||"").replace(/"/g,'""')}"`,stageById[stageOf(r)].n,`"${lic.join(" ")}"`,adoptedCount(r),denomCount(r),covPct(r),gapCount(r),`"${upsellMods(r).join(" ")}"`];
     const states=activeFeatures.map(f=>featState(r,f));
     return base.concat(states).join(",");
   }).join("\n");
@@ -870,9 +1000,10 @@ let searchTimer;
 document.getElementById("search").addEventListener("input",e=>{ state.search=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(render,140); });
 document.getElementById("workspaceFilter").addEventListener("change",e=>{ state.workspace=e.target.value; render(); });
 document.getElementById("moduleFilter").addEventListener("change",e=>{ state.module=e.target.value; render(); });
+document.getElementById("stageFilter").addEventListener("change",e=>{ state.stage=e.target.value; if(state.stage) state.preset="all"; render(); });
 document.getElementById("featureFilter").addEventListener("change",e=>{ state.feature=e.target.value; render(); });
 document.getElementById("reportFreqFilter").addEventListener("change",e=>{ state.reportFreq=e.target.value; render(); });
-document.getElementById("resetBtn").addEventListener("click",()=>{ state={search:"",workspace:"",module:"",feature:"",reportFreq:"",preset:"all"}; document.getElementById("search").value=""; ["workspaceFilter","moduleFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";}); render(); });
+document.getElementById("resetBtn").addEventListener("click",()=>{ state={search:"",workspace:"",module:"",feature:"",reportFreq:"",stage:"",preset:"all"}; document.getElementById("search").value=""; ["workspaceFilter","moduleFilter","stageFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";}); render(); });
 document.addEventListener("keydown",e=>{ if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="SELECT"){e.preventDefault();document.getElementById("search").focus();} if(e.key==="Escape"&&!document.getElementById("authModal").classList.contains("hidden"))closeModal(); });
 
 loadData();
