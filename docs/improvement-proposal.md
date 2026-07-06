@@ -169,8 +169,8 @@ console and Role Studio read as two views of one system.
 
 ## Suggested phased rollout (trackable)
 
-- [ ] **Phase 0 — Align taxonomy** (0.5 day): confirm the feature→module mapping with product.
-- [ ] **Phase 1 — Entitlement input** (1 day): add module columns/tab + read them in.
-- [ ] **Phase 2 — Entitlement-aware UI** (1–2 days): three-state cells, corrected denominators, gap vs upsell KPIs, module grouping.
-- [ ] **Phase 3 — Lifecycle status** (1–2 days): per-plant × module rollout stage + worklist filters.
-- [ ] **Phase 4 — Usage** (depends on product instrumentation): PostHog funnel per module.
+- [x] **Phase 0 — Align taxonomy**: feature→module mapping grounded in `SETS`/`coverage-map.csv`; 2 open items remain (WhatsApp delivery, OCR sub-feature).
+- [x] **Phase 1 — Entitlement-aware UI** *(shipped, entitlements mocked)*: config-driven mapping, 8 modules, three feature types, four cell states, coverage = adopted ÷ licensed, Gap + Upsell KPIs, module grouping.
+- [x] **Phase 2 — Implementation lifecycle** *(shipped, health mocked)*: Not started → In progress → Live → Healthy pipeline, per-plant stage, rollout worklist, plant-page stepper + next-best-action.
+- [ ] **Phase 3 — Wire real entitlement source**: replace the mocked `entitlement()` (and later `mockHealthy()`); decide sheet columns vs `Entitlements` tab vs v2 backend.
+- [ ] **Phase 4 — Usage** (depends on product instrumentation): PostHog funnel per module → real `Healthy` stage.
