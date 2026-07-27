@@ -283,7 +283,23 @@ footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);font-si
 <body>
 
 
-<!-- View-only broadcast build — no admin/edit path (see admin.html for editing) -->
+<!-- ══ AUTH MODAL ══ -->
+<div class="modal-backdrop hidden" id="authModal">
+  <div class="modal">
+    <div class="modal-icon">🔒</div>
+    <h2>Admin Access</h2>
+    <p class="modal-sub">Enter the admin password to enable Edit Mode. Viewers can browse without logging in.</p>
+    <div class="pw-wrap">
+      <input class="pw-input" type="password" id="pwInput" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')submitPassword()">
+      <button class="eye-btn" id="eyeBtn" onclick="togglePwVisibility()" title="Show/hide password">👁</button>
+    </div>
+    <div class="pw-error" id="pwError"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-unlock" id="unlockBtn" onclick="submitPassword()">Unlock Edit Mode</button>
+    </div>
+  </div>
+</div>
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
@@ -422,6 +438,8 @@ footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);font-si
       <input class="tbl-search" id="tblWsSearch" placeholder="🔍 Workspace…" oninput="renderTable(getFiltered())">
       <div class="spacer"></div>
       <button class="export-btn" onclick="exportCSV()">⬇ CSV</button>
+      <span class="admin-badge" id="adminBadge">VIEWER</span>
+      <button class="edit-mode-toggle" id="editToggle" onclick="openEditModal()">✏ Edit Mode</button>
     </div>
 
     <div class="table-wrap" style="margin-top:10px;">
@@ -456,6 +474,7 @@ const REPORT_FREQS       = ["Daily","Weekly","Monthly","All","None"];
 const FREQ_COLORS        = {Daily:"#0c8a7a",Weekly:"#2f8f8f",Monthly:"#6fb8b8",All:"#43a6a6",None:"#d0dae6"};
 
 let records  = [];
+let editMode = false;
 let state    = {workspace:"",search:"",feature:"",reportFreq:""};
 
 // ── Table page ───────────────────────────────────────────────
@@ -605,6 +624,20 @@ async function loadData(){
 function showError(msg){
   document.getElementById("errorBanner").style.display="flex";
   document.getElementById("errorMsg").textContent=msg;
+}
+
+// ── Save field ────────────────────────────────────────────────
+async function saveField(rowIndex, field, value, indicatorEl){
+  if(indicatorEl){indicatorEl.className="save-indicator saving";indicatorEl.textContent="saving…";}
+  try{
+    const res=await fetch(API,{method:"POST",body:JSON.stringify({rowIndex,field,value})});
+    const json=await res.json();
+    if(!json.success) throw new Error(json.error);
+    if(indicatorEl){indicatorEl.className="save-indicator saved";indicatorEl.textContent="saved ✓";setTimeout(()=>{if(indicatorEl)indicatorEl.textContent="";},2000);}
+  }catch(e){
+    if(indicatorEl){indicatorEl.className="save-indicator error";indicatorEl.textContent="error!";}
+    showError("Save failed: "+e.message);
+  }
 }
 
 // ── Filters ───────────────────────────────────────────────────
@@ -759,15 +792,19 @@ function renderTable(filtered){
     const on=allBoolFeatures.filter(f=>r[f]).length+(r.reportsType!=="None"?1:0);
     const tot=allBoolFeatures.length+1;
     const covCls=pct(on,tot)>=50?"hi":pct(on,tot)>=20?"mid":"lo";
-    const reportsCell=`<span class="score-pill ${fp[r.reportsType]}">${r.reportsType}</span>`;
+    const reportsCell=editMode
+      ?`<select class="reports-select" data-row="${r.rowIndex}" data-field="Reports" onchange="handleEdit(this)">${REPORT_FREQS.map(f=>`<option${r.reportsType===f?" selected":""}>${f}</option>`).join("")}</select>`
+      :`<span class="score-pill ${fp[r.reportsType]}">${r.reportsType}</span>`;
     let cells=`
-      <td class="plant-name"><span class="clickable-plant" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span></td>
+      <td class="plant-name"><span class="clickable-plant" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span><span class="save-indicator" id="si-${r.rowIndex}"></span></td>
       <td class="workspace-name"><span class="clickable-ws" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span></td>
       <td class="center col-divider">${reportsCell}</td>`;
     colOrder.forEach((f,i)=>{
       const div=(i===clientBoolFeatures.length)?"col-divider":"";
       const isOn=r[f];
-      cells+=`<td class="center ${div}"><span class="dot ${isOn?"on":"off"}"></span></td>`;
+      cells+=editMode
+        ?`<td class="center ${div}"><span class="dot ${isOn?"on":"off"} edit-mode" data-row="${r.rowIndex}" data-field="${f}" data-val="${isOn}" onclick="handleDotClick(this)"></span></td>`
+        :`<td class="center ${div}"><span class="dot ${isOn?"on":"off"}"></span></td>`;
     });
     cells+=`<td class="center col-divider"><span class="score-pill ${covCls}">${on}/${tot}</span></td>`;
     return `<tr>${cells}</tr>`;
@@ -884,6 +921,100 @@ function renderPlantPage(r){
         <div class="fgc-body">${commonRows}</div>
       </div>
     </div>`;
+}
+
+// ── Auth & Edit mode ──────────────────────────────────────────
+// Password stored in HTML — file is shared only with @digitalpaani.com accounts
+// so only internal team members can ever see this source code.
+const ADMIN_PASSWORD = "digitalpaani@123";
+let isAdmin = false;
+
+function openEditModal(){
+  if(isAdmin){
+    exitEditMode();
+    return;
+  }
+  document.getElementById("pwInput").value="";
+  document.getElementById("pwError").textContent="";
+  document.getElementById("authModal").classList.remove("hidden");
+  setTimeout(()=>document.getElementById("pwInput").focus(), 80);
+}
+
+function closeModal(){
+  document.getElementById("authModal").classList.add("hidden");
+  document.getElementById("pwInput").value="";
+  document.getElementById("pwError").textContent="";
+}
+
+function togglePwVisibility(){
+  const inp=document.getElementById("pwInput");
+  const eye=document.getElementById("eyeBtn");
+  if(inp.type==="password"){
+    inp.type="text"; eye.textContent="🙈";
+  } else {
+    inp.type="password"; eye.textContent="👁";
+  }
+}
+
+function submitPassword(){
+  const pw = document.getElementById("pwInput").value;
+  if(!pw){ showPwError("Please enter a password."); return; }
+  if(pw === ADMIN_PASSWORD){
+    closeModal();
+    enterEditMode();
+  } else {
+    showPwError("Incorrect password. Try again.");
+    const inp = document.getElementById("pwInput");
+    inp.classList.add("shake");
+    inp.addEventListener("animationend", ()=> inp.classList.remove("shake"), {once:true});
+  }
+}
+
+function showPwError(msg){
+  document.getElementById("pwError").textContent=msg;
+}
+
+function enterEditMode(){
+  isAdmin  = true;
+  editMode = true;
+  const btn = document.getElementById("editToggle");
+  btn.classList.add("active");
+  btn.textContent = "✏ Exit Edit Mode";
+  const ab=document.getElementById("adminBadge");
+  if(ab){ab.textContent="ADMIN";ab.classList.add("on");}
+  document.getElementById("editHint").style.display = "block";
+  renderTable(getFiltered());
+}
+
+function exitEditMode(){
+  editMode=false;
+  isAdmin=false;
+  const btn=document.getElementById("editToggle");
+  btn.classList.remove("active");
+  btn.textContent="✏ Edit Mode";
+  const ab2=document.getElementById("adminBadge");
+  if(ab2){ab2.textContent="VIEWER";ab2.classList.remove("on");}
+  const eh2=document.getElementById("editHint"); if(eh2) eh2.style.display="none";
+  renderTable(getFiltered());
+}
+
+// close modal on backdrop click
+document.getElementById("authModal").addEventListener("click", function(e){
+  if(e.target===this) closeModal();
+});
+function handleDotClick(el){
+  if(!editMode) return;
+  const rowIndex=+el.dataset.row,field=el.dataset.field,newVal=el.dataset.val!=="true";
+  const rec=records.find(r=>r.rowIndex===rowIndex);
+  if(rec) rec[field]=newVal;
+  el.dataset.val=newVal; el.className=`dot ${newVal?"on":"off"} edit-mode`;
+  saveField(rowIndex,field,newVal,document.getElementById(`si-${rowIndex}`));
+}
+function handleEdit(el){
+  const rowIndex=+el.dataset.row,field=el.dataset.field,newVal=el.value;
+  const rec=records.find(r=>r.rowIndex===rowIndex);
+  if(rec) rec.reportsType=newVal;
+  saveField(rowIndex,field,newVal,document.getElementById(`si-${rowIndex}`));
 }
 
 // ── CSV export ────────────────────────────────────────────────
