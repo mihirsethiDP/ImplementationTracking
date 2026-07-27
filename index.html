@@ -349,6 +349,29 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 .nba{background:var(--gold-pale);border:1px solid #ecd9a8;border-radius:var(--r-sm);padding:12px 16px;font-size:12.5px;color:#6b540f;margin:14px 0 4px;}
 .nba b{color:#4d3d09;}
 .md-stage{font-family:var(--mono);font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:5px;}
+
+/* ── Search autocomplete + dedicated table page (merge from _NEW.html) ── */
+.ac-wrap{position:relative;}
+.ac-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--shadow);z-index:120;max-height:300px;overflow-y:auto;display:none;padding:4px 0;}
+.ac-dropdown.open{display:block;}
+.ac-group-label{font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);padding:8px 14px 4px;}
+.ac-item{padding:8px 12px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:8px;border-radius:7px;margin:0 5px;}
+.ac-item:hover,.ac-item.focused{background:var(--common-pale);color:var(--navy);}
+.ac-item mark{background:none;color:var(--navy);font-weight:700;}
+.ac-item .ac-tag{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--ink-faint);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ac-empty{padding:14px;font-size:12px;color:var(--ink-faint);text-align:center;}
+.open-table{margin-top:26px;display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--navy-deep),var(--navy-mid));border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow);flex-wrap:wrap;color:#fff;}
+.open-table .ot-ic{font-size:26px;}
+.open-table .ot-txt{flex:1;min-width:200px;}
+.open-table .ot-txt h3{margin:0 0 3px;font-size:15.5px;color:#fff;font-weight:800;letter-spacing:-.01em;}
+.open-table .ot-txt p{margin:0;font-size:12px;color:rgba(255,255,255,.72);}
+.open-table .ot-btn{font-family:var(--mono);font-size:13px;font-weight:700;padding:12px 22px;border-radius:10px;border:none;background:#fff;color:var(--navy);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px;}
+.open-table .ot-btn:hover{background:var(--common-pale);}
+.active-filters{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:2px 0 14px;font-size:11.5px;}
+.af-chip{font-family:var(--mono);font-size:10.5px;background:var(--common-pale);color:var(--navy);padding:4px 10px;border-radius:999px;}
+.af-chip b{font-weight:700;}
+.af-clear{font-size:11px;color:var(--flag);background:none;border:none;cursor:pointer;font-weight:600;}
+.af-none{color:var(--ink-faint);}
 </style>
 </head>
 <body>
@@ -409,7 +432,7 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 
     <div class="command">
       <div class="command-row">
-        <div class="search-box"><span class="s-ic">🔍</span><input type="text" id="search" placeholder="Search plant or workspace…"><span class="s-key">/</span></div>
+        <div class="search-box ac-wrap"><span class="s-ic">🔍</span><input type="text" id="search" placeholder="Search plant or workspace…" autocomplete="off"><span class="s-key">/</span><div class="ac-dropdown" id="searchDropdown"></div></div>
         <div class="presets" id="presets"></div>
         <button class="more-btn" id="moreBtn" onclick="toggleAdvanced()">⚙ Filters</button>
       </div>
@@ -445,15 +468,11 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
     </section>
 
     <section class="section">
-      <div class="section-head"><h3>Plant detail</h3><span class="hint" id="tableCount"></span></div>
-      <div class="edit-hint" id="editHint">✏ Edit Mode is ON — click a dot to toggle a feature (locked 🔒 cells can't be turned on until the plant is licensed). Changes save to the sheet instantly.</div>
-      <div class="table-toolbar">
-        <span class="admin-badge" id="adminBadge2" style="background:var(--common-pale);color:var(--navy);border-color:var(--common)">VIEWER</span>
-        <div class="spacer"></div>
-        <button class="edit-toggle" id="editToggle" onclick="openEditModal()">✏ Edit Mode</button>
-        <button class="ghost-btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <div class="open-table">
+        <span class="ot-ic">📋</span>
+        <div class="ot-txt"><h3>Feature adoption table</h3><p>Full plant-by-plant breakdown — every feature, coverage &amp; rollout stage. Search, filter and edit directly.</p></div>
+        <button class="ot-btn" onclick="goTable()">View table <span id="tableBtnCount" class="mono"></span> →</button>
       </div>
-      <div class="table-wrap"><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div><div class="table-foot" id="tableFoot"></div></div>
     </section>
 
     <footer><div class="foot-msg" id="footMsg">—</div><div class="foot-meta">Digital Paani · Feature Adoption Console</div></footer>
@@ -463,6 +482,23 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
   <div class="page" id="pageWorkspace"><div class="breadcrumb" id="wsBreadcrumb"></div><div id="wsContent"></div><div class="nav-row" id="wsNavRow"></div></div>
   <!-- PLANT -->
   <div class="page" id="pagePlant"><div class="breadcrumb" id="plantBreadcrumb"></div><div id="plantContent"></div><div class="nav-row" id="plantNavRow"></div></div>
+
+  <!-- TABLE -->
+  <div class="page" id="pageTable">
+    <div class="breadcrumb"><span class="bc-item" onclick="goHome()">🏠 Overview</span><span class="bc-sep">›</span><span class="bc-item active">📋 Feature adoption table</span></div>
+    <div class="section-head" style="margin-top:22px"><h3>Feature adoption table</h3><span class="hint" id="tableCount"></span></div>
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="edit-hint" id="editHint">✏ Edit Mode is ON — click a dot to toggle a feature (locked 🔒 cells can't be turned on until the plant is licensed). Changes save to the sheet instantly.</div>
+    <div class="table-toolbar">
+      <div class="search-box ac-wrap" style="flex:0 0 260px;max-width:260px"><span class="s-ic">🔍</span><input type="text" id="tblSearch" placeholder="Search plant or workspace…" autocomplete="off"></div>
+      <span class="admin-badge" id="adminBadge2" style="background:var(--common-pale);color:var(--navy);border-color:var(--common)">VIEWER</span>
+      <div class="spacer"></div>
+      <button class="edit-toggle" id="editToggle" onclick="openEditModal()">✏ Edit Mode</button>
+      <button class="ghost-btn" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+    <div class="table-wrap"><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div><div class="table-foot" id="tableFoot"></div></div>
+    <div class="nav-row"><button class="nav-home" onclick="goHome()">🏠 Overview</button></div>
+  </div>
 </div>
 
 <script>
@@ -705,7 +741,7 @@ function renderPresets(){
   const defs=[ {k:"all",l:"All plants",c:""},{k:"worklist",l:"Rollout worklist 🛠",c:"attn"},{k:"full",l:"Live 🏆",c:""},{k:"upsell",l:"Upsell targets 🛒",c:""} ];
   document.getElementById("presets").innerHTML=defs.map(d=>`<button class="preset ${d.c} ${state.preset===d.k?"active":""}" onclick="setPreset('${d.k}')">${d.l} <span class="cnt">${counts[d.k]}</span></button>`).join("");
 }
-function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; if(state.preset!=="all") state.stage=""; render(); }
+function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; if(state.preset!=="all") state.stage=""; render(); if(state.preset!=="all") goTable(); }
 
 // lifecycle pipeline
 function renderFunnel(rows){
@@ -839,12 +875,51 @@ function renderFoot(rows){
   document.getElementById("tableFoot").textContent=`Showing ${rows.length} plants · ${pct(ad,dn)}% of licensed features adopted · coverage = adopted ÷ licensed · sorted high → low`;
   const live=records.filter(r=>isLive(r)).length;
   document.getElementById("footMsg").innerHTML= records.length ? `<b>${live}</b> of <b>${records.length}</b> plants have rolled out every module they're licensed for. 🌱` : "—";
+  const btn=document.getElementById("tableBtnCount"); if(btn) btn.textContent="("+rows.length+")";
+  renderActiveFilters();
+}
+function renderActiveFilters(){
+  const el=document.getElementById("activeFilters"); if(!el) return;
+  const chips=[];
+  if(state.search)     chips.push(["Search",state.search]);
+  if(state.workspace)  chips.push(["Workspace",state.workspace]);
+  if(state.stage)      chips.push(["Stage",stageById[state.stage]?.n||state.stage]);
+  if(state.module)     chips.push(["Module",modById[state.module]?.n||state.module]);
+  if(state.feature)    chips.push(["Feature",state.feature]);
+  if(state.reportFreq) chips.push(["Report freq",state.reportFreq]);
+  if(state.preset!=="all") chips.push(["View",{worklist:"Rollout worklist",full:"Live",upsell:"Upsell targets"}[state.preset]||state.preset]);
+  el.innerHTML = chips.length
+    ? chips.map(c=>`<span class="af-chip"><b>${escHtml(c[0])}:</b> ${escHtml(String(c[1]))}</span>`).join("")+`<button class="af-clear" onclick="clearAllFilters()">✕ Clear all</button>`
+    : `<span class="af-none">Showing all plants — no filters applied.</span>`;
+}
+function clearAllFilters(){
+  state={search:"",workspace:"",module:"",feature:"",reportFreq:"",stage:"",preset:"all"};
+  ["search","tblSearch","workspaceFilter","moduleFilter","stageFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  render();
 }
 
 // ══════════ Navigation ══════════
-function scrollToTable(){ document.querySelector("#pageHome .section:last-of-type")?.scrollIntoView({behavior:"smooth"}); }
+function syncSearchInputs(){ const s=document.getElementById("search"), t=document.getElementById("tblSearch"); if(s)s.value=state.search; if(t)t.value=state.search; }
+function goTable(){ prevPage=null; hideSearchDropdown(); syncSearchInputs(); renderTable(getFiltered()); renderFoot(getFiltered()); showPage("pageTable"); }
+function scrollToTable(){ goTable(); }
+// ── search autocomplete ──
+function hl(s,q){ const i=s.toLowerCase().indexOf(q); if(i<0) return escHtml(s); return escHtml(s.slice(0,i))+"<mark>"+escHtml(s.slice(i,i+q.length))+"</mark>"+escHtml(s.slice(i+q.length)); }
+function hideSearchDropdown(){ const d=document.getElementById("searchDropdown"); if(d) d.classList.remove("open"); }
+function buildSearchDropdown(q){
+  const drop=document.getElementById("searchDropdown"); if(!drop) return;
+  q=(q||"").trim().toLowerCase();
+  if(!q){ drop.classList.remove("open"); drop.innerHTML=""; return; }
+  const wsM=[...new Set(records.map(r=>r.workspace).filter(Boolean))].filter(w=>w.toLowerCase().includes(q)).sort().slice(0,5);
+  const plM=records.filter(r=>r.plant&&r.plant.toLowerCase().includes(q)).sort((a,b)=>a.plant.localeCompare(b.plant)).slice(0,8);
+  if(!wsM.length && !plM.length){ drop.innerHTML=`<div class="ac-empty">No plants or workspaces match “${escHtml(q)}”.</div>`; drop.classList.add("open"); return; }
+  let h="";
+  if(wsM.length) h+=`<div class="ac-group-label">Workspaces</div>`+wsM.map(w=>`<div class="ac-item" onmousedown="event.preventDefault()" onclick="selectWorkspaceAc('${esc(w)}')">🏢 <span>${hl(w,q)}</span><span class="ac-tag">workspace</span></div>`).join("");
+  if(plM.length) h+=`<div class="ac-group-label">Plants</div>`+plM.map(r=>`<div class="ac-item" onmousedown="event.preventDefault()" onclick="goPlant(${r.rowIndex},false)">📍 <span>${hl(r.plant,q)}</span><span class="ac-tag">${escHtml(r.workspace||"")}</span></div>`).join("");
+  drop.innerHTML=h; drop.classList.add("open");
+}
+function selectWorkspaceAc(w){ hideSearchDropdown(); goWorkspace(w); }
 function showPage(id){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(id).classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
-function goHome(){ prevPage=null; showPage("pageHome"); render(); }
+function goHome(){ prevPage=null; hideSearchDropdown(); showPage("pageHome"); render(); }
 function goWorkspace(ws){ prevPage=null; renderWorkspacePage(ws); showPage("pageWorkspace"); }
 function goPlant(rowIndex,fromWs){ const r=records.find(x=>x.rowIndex===rowIndex); if(!r) return; prevPage=fromWs?"workspace:"+r.workspace:"home"; renderPlantPage(r,fromWs); showPage("pagePlant"); }
 
@@ -997,14 +1072,21 @@ function exportCSV(){
 // ══════════ Events ══════════
 function toggleAdvanced(){ document.getElementById("advanced").classList.toggle("open"); }
 let searchTimer;
-document.getElementById("search").addEventListener("input",e=>{ state.search=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(render,140); });
+document.getElementById("search").addEventListener("input",e=>{ state.search=e.target.value; buildSearchDropdown(e.target.value); const t=document.getElementById("tblSearch"); if(t)t.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(render,140); });
+document.getElementById("search").addEventListener("focus",e=>buildSearchDropdown(e.target.value));
+document.getElementById("search").addEventListener("keydown",e=>{ if(e.key==="Enter"){ hideSearchDropdown(); goTable(); } });
+document.getElementById("tblSearch").addEventListener("input",e=>{ state.search=e.target.value; const s=document.getElementById("search"); if(s)s.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ renderTable(getFiltered()); renderFoot(getFiltered()); },140); });
+document.addEventListener("click",e=>{ if(!e.target.closest(".search-box")) hideSearchDropdown(); });
 document.getElementById("workspaceFilter").addEventListener("change",e=>{ state.workspace=e.target.value; render(); });
 document.getElementById("moduleFilter").addEventListener("change",e=>{ state.module=e.target.value; render(); });
 document.getElementById("stageFilter").addEventListener("change",e=>{ state.stage=e.target.value; if(state.stage) state.preset="all"; render(); });
 document.getElementById("featureFilter").addEventListener("change",e=>{ state.feature=e.target.value; render(); });
 document.getElementById("reportFreqFilter").addEventListener("change",e=>{ state.reportFreq=e.target.value; render(); });
-document.getElementById("resetBtn").addEventListener("click",()=>{ state={search:"",workspace:"",module:"",feature:"",reportFreq:"",stage:"",preset:"all"}; document.getElementById("search").value=""; ["workspaceFilter","moduleFilter","stageFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";}); render(); });
-document.addEventListener("keydown",e=>{ if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="SELECT"){e.preventDefault();document.getElementById("search").focus();} if(e.key==="Escape"&&!document.getElementById("authModal").classList.contains("hidden"))closeModal(); });
+document.getElementById("resetBtn").addEventListener("click",()=>{ clearAllFilters(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="SELECT"){ e.preventDefault(); const onTable=document.getElementById("pageTable").classList.contains("active"); document.getElementById(onTable?"tblSearch":"search").focus(); }
+  if(e.key==="Escape"){ hideSearchDropdown(); if(!document.getElementById("authModal").classList.contains("hidden"))closeModal(); }
+});
 
 loadData();
 </script>
