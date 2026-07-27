@@ -8,30 +8,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root{
+  /* Chrome / neutrals */
   --navy:#193458; --navy-deep:#0f2140; --navy-mid:#244a78;
   --ink:#12233a; --ink-soft:#5a6b82; --ink-faint:#8a99ad;
   --paper:#f4f6fa; --panel:#ffffff; --panel-2:#f8fafc;
   --line:#e2e8f1; --line-soft:#eef2f7;
 
-  /* legacy group colours (still used by a few chips) */
+  /* Semantic group colours — used identically everywhere (Law of Similarity) */
   --client:#0c8a7a;  --client-pale:#e2f4f1;
   --operator:#c97a2c; --operator-pale:#f8ecdd;
   --common:#4a5f8f;  --common-pale:#e7ebf5;
 
-  /* 8 product-module colours (aligned with CloseTheLoop v2 Role Studio) */
-  --m-core:#5a6b82;      --m-core-pale:#eef1f6;
-  --m-ops:#0E7C66;       --m-ops-pale:#e2f2ee;
-  --m-tasks:#c97a2c;     --m-tasks-pale:#f8ecdd;
-  --m-data:#2f6fd0;      --m-data-pale:#e5eefb;
-  --m-analytics:#5548C8; --m-analytics-pale:#ebe9fb;
-  --m-iot:#0f9bb0;       --m-iot-pale:#e0f3f6;
-  --m-inv:#8a6d24;       --m-inv-pale:#f4efdf;
-  --m-floc:#b1477f;      --m-floc-pale:#f8e6f0;
-
+  /* State */
   --good:#0c8a7a;
-  --flag:#e2513f;    --flag-pale:#fce8e5;   /* Von Restorff — the one thing needing attention */
+  --flag:#e2513f;    --flag-pale:#fce8e5;   /* Von Restorff accent — RESERVED for the one thing that needs attention */
   --gold:#d99a2b;    --gold-pale:#fbf1da;
-  --lock:#aeb8c6;    --lock-pale:#f0f2f6;   /* not licensed / upsell */
 
   --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
   --shadow-sm:0 1px 2px rgba(15,33,64,.05);
@@ -44,9 +35,9 @@ html,body{margin:0;padding:0;}
 body{background:var(--paper);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;}
 .mono{font-family:var(--mono);}
 
-/* Header */
+/* ─────────────── Header ─────────────── */
 header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 2px 18px rgba(15,33,64,.28);}
-.top-inner{max-width:1320px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:22px;}
+.top-inner{max-width:1280px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:22px;}
 .brand img{height:40px;width:auto;display:block;}
 .top-right{display:flex;align-items:center;gap:12px;}
 .top-meta{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);white-space:nowrap;}
@@ -56,13 +47,8 @@ header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 
 .icon-btn:hover{background:rgba(255,255,255,.18);}
 .icon-btn.syncing{opacity:.5;pointer-events:none;}
 
-/* mock-data banner */
-.mock-banner{max-width:1320px;margin:12px auto 0;padding:9px 18px;background:var(--gold-pale);border:1px solid #ecd9a8;border-radius:10px;font-size:12px;color:#8a6d1a;font-family:var(--mono);display:flex;align-items:center;gap:9px;}
-.mock-banner b{color:#6b540f;}
-.mock-banner .x{margin-left:auto;cursor:pointer;border:none;background:none;color:#8a6d1a;font-size:14px;}
-
-/* Layout */
-.wrap{max-width:1320px;margin:0 auto;padding:0 26px 90px;}
+/* ─────────────── Layout ─────────────── */
+.wrap{max-width:1280px;margin:0 auto;padding:0 26px 90px;}
 .page{display:none;}
 .page.active{display:block;animation:fade .3s ease;}
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
@@ -71,21 +57,21 @@ header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 
 .section-head h3{font-size:13px;margin:0;font-weight:700;color:var(--navy-deep);text-transform:uppercase;letter-spacing:.05em;}
 .section-head .hint{font-size:11.5px;color:var(--ink-faint);font-family:var(--mono);}
 
-/* Loading / error */
+/* ─────────────── Loading / error ─────────────── */
 .loading-overlay{position:fixed;inset:0;background:rgba(244,246,250,.96);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .spinner{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;animation:spin .75s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay p{font-family:var(--mono);font-size:13px;color:var(--ink-soft);}
 .error-banner{background:var(--flag-pale);border:1px solid #f0c3bc;border-radius:var(--r-sm);padding:13px 17px;margin:16px 0;font-size:12.5px;color:var(--flag);display:flex;gap:10px;align-items:flex-start;}
 
-/* Breadcrumb */
+/* ─────────────── Breadcrumb ─────────────── */
 .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;font-family:var(--mono);padding:16px 0 0;flex-wrap:wrap;}
 .bc-item{color:var(--navy);font-weight:600;cursor:pointer;padding:5px 11px;border-radius:7px;border:1px solid var(--line);background:var(--panel);transition:.12s;white-space:nowrap;}
 .bc-item:hover{background:var(--common-pale);border-color:var(--common);}
 .bc-item.active{background:var(--navy);color:#fff;border-color:var(--navy);cursor:default;}
 .bc-sep{color:var(--ink-faint);font-size:11px;}
 
-/* HERO */
+/* ─────────────── HERO (Goal gradient + Von Restorff) ─────────────── */
 .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-top:22px;}
 @media(max-width:840px){.hero{grid-template-columns:1fr;}}
 .hero-main{background:linear-gradient(135deg,var(--navy-deep),var(--navy-mid));border-radius:var(--r);padding:26px 30px;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;gap:28px;box-shadow:var(--shadow);}
@@ -96,20 +82,19 @@ header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 
 .hero-ring .ring-pct{font-family:var(--mono);font-size:30px;font-weight:700;line-height:1;}
 .hero-ring .ring-lbl{font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.09em;margin-top:5px;}
 .hero-copy h2{font-size:20px;margin:0 0 5px;font-weight:800;letter-spacing:-.02em;}
-.hero-copy .goal{font-size:12.5px;opacity:.82;line-height:1.55;max-width:340px;}
+.hero-copy .goal{font-size:12.5px;opacity:.82;line-height:1.55;max-width:330px;}
 .hero-copy .goal b{color:#8fe0d3;font-weight:700;}
 .hero-side{display:grid;grid-template-rows:1fr 1fr;gap:16px;}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);cursor:pointer;}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);}
 .kpi .kpi-num{font-family:var(--mono);font-size:30px;font-weight:700;line-height:1;}
 .kpi .kpi-txt .kpi-lbl{font-size:12px;font-weight:700;color:var(--ink);}
 .kpi .kpi-txt .kpi-sub{font-size:11px;color:var(--ink-soft);margin-top:2px;}
 .kpi.flag{border-color:#f0c3bc;background:linear-gradient(90deg,var(--flag-pale),var(--panel) 70%);}
 .kpi.flag .kpi-num{color:var(--flag);}
-.kpi.upsell{border-color:#c9d3e0;background:linear-gradient(90deg,var(--lock-pale),var(--panel) 70%);}
-.kpi.upsell .kpi-num{color:var(--navy-mid);}
-.kpi .kpi-ic{font-size:20px;}
+.kpi.flag .kpi-ic{font-size:20px;}
+.kpi.calm .kpi-num{color:var(--navy);}
 
-/* Command bar */
+/* ─────────────── Command bar (Hick's Law: few visible choices) ─────────────── */
 .command{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow-sm);}
 .command-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .search-box{position:relative;flex:1;min-width:220px;}
@@ -126,58 +111,49 @@ header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 
 .preset.attn.active{background:var(--flag);border-color:var(--flag);color:#fff;}
 .more-btn{font-size:12px;font-weight:600;padding:8px 13px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--panel-2);color:var(--ink-soft);cursor:pointer;transition:.14s;margin-left:auto;}
 .more-btn:hover{border-color:var(--navy-mid);color:var(--navy);}
-.advanced{display:none;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);}
+.advanced{display:none;gap:12px;flex-wrap:wrap;align-items:center;margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);}
 .advanced.open{display:flex;}
 .adv-field{display:flex;flex-direction:column;gap:4px;}
 .adv-field label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);font-weight:700;}
 .advanced select{font-family:inherit;font-size:12.5px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);outline:none;}
 .advanced select:focus{border-color:var(--navy);}
-.reset-link{font-size:12px;color:var(--flag);background:none;border:none;cursor:pointer;font-weight:600;padding:7px 4px;}
+.reset-link{font-size:12px;color:var(--flag);background:none;border:none;cursor:pointer;font-weight:600;align-self:flex-end;padding:7px 4px;}
 
-/* legend */
-.legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);margin-top:11px;}
-.legend .li{display:flex;align-items:center;gap:6px;}
-.legend .dot{width:11px;height:11px;}
-
-/* Module adoption cards */
-.mod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-@media(max-width:1000px){.mod-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.mod-grid{grid-template-columns:1fr;}}
-.mod-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;box-shadow:var(--shadow-sm);border-top:3px solid var(--g,var(--m-core));}
-.mod-card .mc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
-.mod-card .mc-name{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:7px;}
-.mod-card .mc-ic{font-size:14px;}
-.mod-card .mc-pct{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--g);}
-.mod-card .mc-bar{height:7px;border-radius:5px;background:var(--line-soft);overflow:hidden;}
-.mod-card .mc-fill{height:100%;border-radius:5px;background:var(--g);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1);}
-.mod-card .mc-meta{font-size:10.5px;color:var(--ink-soft);font-family:var(--mono);margin-top:8px;display:flex;justify-content:space-between;}
-.mod-card .mc-up{font-size:10.5px;font-family:var(--mono);margin-top:5px;color:var(--navy-mid);}
-.mod-card.hw{border-top-style:dashed;}
-.mod-card .hw-tag{font-family:var(--mono);font-size:8px;font-weight:700;background:var(--m-floc-pale);color:var(--m-floc);padding:2px 6px;border-radius:4px;}
+/* ─────────────── Group adoption cards + insight (Similarity + Von Restorff) ─────────────── */
+.group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+@media(max-width:760px){.group-grid{grid-template-columns:1fr;}}
+.group-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;box-shadow:var(--shadow-sm);border-top:3px solid var(--g,var(--common));}
+.group-card .gc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.group-card .gc-name{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.group-card .gc-dot{width:9px;height:9px;border-radius:3px;background:var(--g);}
+.group-card .gc-pct{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--g);}
+.group-card .gc-bar{height:8px;border-radius:6px;background:var(--line-soft);overflow:hidden;}
+.group-card .gc-fill{height:100%;border-radius:6px;background:var(--g);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1);}
+.group-card .gc-meta{font-size:11px;color:var(--ink-soft);font-family:var(--mono);margin-top:9px;display:flex;justify-content:space-between;}
 .insight{grid-column:1/-1;background:linear-gradient(90deg,var(--flag-pale),var(--panel) 75%);border:1px solid #f0c3bc;border-left:4px solid var(--flag);border-radius:var(--r-sm);padding:14px 18px;display:flex;align-items:center;gap:13px;}
 .insight .in-ic{font-size:19px;}
 .insight .in-txt{font-size:12.5px;color:var(--ink);}
 .insight .in-txt b{color:var(--flag);}
 
-/* Feature list */
+/* ─────────────── Feature list (sorted asc, lowest highlighted) ─────────────── */
 .feat-list{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);}
-.feat-item{display:grid;grid-template-columns:210px 150px 1fr 120px;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line-soft);cursor:pointer;transition:.12s;}
+.feat-item{display:grid;grid-template-columns:200px 90px 1fr 58px;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line-soft);cursor:pointer;transition:.12s;}
 .feat-item:last-child{border-bottom:none;}
 .feat-item:hover{background:var(--panel-2);}
 .feat-item.selected{background:var(--common-pale);}
 .feat-item.lowest{background:linear-gradient(90deg,var(--flag-pale),transparent 60%);}
-.feat-item.retired{opacity:.55;}
-.feat-item .fi-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.feat-item .fi-name .low-tag{font-family:var(--mono);font-size:8.5px;font-weight:700;color:#fff;background:var(--flag);padding:2px 6px;border-radius:4px;}
-.feat-item .fi-name .type-tag{font-family:var(--mono);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--lock-pale);color:var(--ink-soft);}
-.chip{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 7px;border-radius:5px;white-space:nowrap;}
-.feat-item .fi-track{height:9px;border-radius:5px;background:var(--lock-pale);overflow:hidden;display:flex;}
-.feat-item .seg{height:100%;transition:width .9s cubic-bezier(.2,.8,.2,1);width:0;}
-.seg.adopted{background:var(--good);} .seg.gap{background:var(--flag);} .seg.locked{background:var(--lock);}
-.feat-item .fi-nums{font-family:var(--mono);font-size:10.5px;text-align:right;color:var(--ink-soft);line-height:1.5;}
-.feat-item .fi-nums b{color:var(--ink);font-size:12px;}
+.feat-item .fi-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.feat-item .fi-name .low-tag{font-family:var(--mono);font-size:8.5px;font-weight:700;color:#fff;background:var(--flag);padding:2px 6px;border-radius:4px;letter-spacing:.03em;}
+.chip{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;text-align:center;}
+.chip.client{background:var(--client-pale);color:var(--client);}
+.chip.operator{background:var(--operator-pale);color:#8a4d12;}
+.chip.common{background:var(--common-pale);color:var(--common);}
+.feat-item .fi-bar{height:7px;border-radius:5px;background:var(--line-soft);overflow:hidden;}
+.feat-item .fi-fill{height:100%;border-radius:5px;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1);}
+.feat-item .fi-pct{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right;color:var(--ink);}
+.feat-item .fi-cnt{font-family:var(--mono);font-size:9.5px;color:var(--ink-faint);text-align:right;}
 
-/* toolbar + table */
+/* ─────────────── Plant table ─────────────── */
 .table-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px;}
 .spacer{flex:1;}
 .ghost-btn{font-size:12px;font-family:var(--mono);padding:8px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel);cursor:pointer;color:var(--ink-soft);font-weight:600;transition:.12s;}
@@ -187,41 +163,38 @@ header.top{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 
 .edit-hint{display:none;font-size:11.5px;color:var(--gold);background:var(--gold-pale);border:1px solid #ecd9a8;border-radius:8px;padding:7px 12px;margin-bottom:10px;font-family:var(--mono);}
 .table-wrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);}
 .table-scroll{overflow-x:auto;}
-table{border-collapse:collapse;width:100%;font-size:11.5px;min-width:1180px;}
-thead th{position:sticky;top:0;background:var(--panel-2);text-align:left;padding:9px 9px;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);border-bottom:1px solid var(--line);white-space:nowrap;z-index:2;}
-thead tr.groups th{text-align:center;font-size:8.5px;padding:6px 3px;border-bottom:1px solid var(--line);color:#fff;}
+table{border-collapse:collapse;width:100%;font-size:11.5px;min-width:1080px;}
+thead th{position:sticky;top:0;background:var(--panel-2);text-align:left;padding:9px 10px;font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);border-bottom:1px solid var(--line);white-space:nowrap;z-index:2;}
+thead tr.groups th{text-align:center;font-size:9px;padding:6px 4px;border-bottom:1px solid var(--line);}
+thead tr.groups th.gh-client{background:var(--client-pale);color:var(--client);}
+thead tr.groups th.gh-operator{background:var(--operator-pale);color:#8a4d12;}
+thead tr.groups th.gh-common{background:var(--common-pale);color:var(--common);}
 thead tr.groups th.blank{background:var(--panel-2);}
 th.center,td.center{text-align:center;}
-tbody td{padding:8px 9px;border-bottom:1px solid var(--line-soft);white-space:nowrap;}
+tbody td{padding:8px 10px;border-bottom:1px solid var(--line-soft);white-space:nowrap;}
 tbody tr:hover{background:var(--panel-2);}
 tbody tr:last-child td{border-bottom:none;}
-td.plant-name{font-weight:600;max-width:180px;white-space:normal;line-height:1.3;}
-td.ws-name{max-width:140px;white-space:normal;font-size:11px;}
+td.plant-name{font-weight:600;max-width:190px;white-space:normal;line-height:1.3;}
+td.ws-name{max-width:150px;white-space:normal;font-size:11px;}
 .group-div{border-left:2px solid var(--line);}
 .clickable{color:var(--navy);cursor:pointer;font-weight:700;border-bottom:1.5px dashed var(--navy-mid);transition:.1s;}
 .clickable:hover{background:var(--common-pale);border-radius:3px;}
 .clickable-ws{color:var(--ink-soft);cursor:pointer;font-size:11px;border-bottom:1px dashed var(--ink-faint);}
 .clickable-ws:hover{color:var(--navy);}
-
-/* three-state cell */
-.cell{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;}
-.dot{width:11px;height:11px;border-radius:50%;display:inline-block;background:#d5deea;}
-.dot.adopted{background:var(--dc,var(--good));}
-.dot.gap{background:transparent;border:2px solid var(--flag);box-shadow:0 0 0 3px var(--flag-pale);}
-.dot.off{background:transparent;border:2px solid #cdd6e2;}
-.lockmark{color:var(--lock);font-size:11px;opacity:.7;}
-.dash{color:var(--ink-faint);font-size:11px;}
-.edit-mode .dot.adopted,.edit-mode .dot.gap,.edit-mode .dot.off{cursor:pointer;transition:.12s;}
-.edit-mode .cell.editable{cursor:pointer;}
-.edit-mode .cell.editable:hover .dot{transform:scale(1.3);}
+/* dots coloured by group when ON (Similarity) */
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#d5deea;}
+.dot.on{background:var(--dc,var(--good));}
+.edit-mode .dot{cursor:pointer;width:12px;height:12px;transition:.12s;box-shadow:0 0 0 2px transparent;}
+.edit-mode .dot:hover{transform:scale(1.3);}
+.edit-mode .dot.on{box-shadow:0 0 0 2px rgba(0,0,0,.08);}
 .reports-select{font-family:var(--mono);font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);cursor:pointer;outline:none;}
-.reports-select:disabled{opacity:.5;cursor:not-allowed;}
 .freq-pill{font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 9px;border-radius:999px;display:inline-block;}
+/* coverage cell */
 .cov{display:flex;align-items:center;gap:8px;justify-content:center;}
 .cov-bar{width:52px;height:7px;border-radius:5px;background:var(--line-soft);overflow:hidden;}
-.cov-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--good),var(--navy));}
+.cov-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--client),var(--navy));}
 .cov-fill.full{background:linear-gradient(90deg,var(--gold),#e8b84b);}
-.cov-txt{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-soft);min-width:30px;}
+.cov-txt{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink-soft);min-width:34px;}
 .cov-txt.full{color:var(--gold);}
 .save-indicator{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:5px;margin-left:6px;}
 .save-indicator.saving{background:var(--gold-pale);color:#8a6d1a;}
@@ -231,7 +204,7 @@ td.ws-name{max-width:140px;white-space:normal;font-size:11px;}
 .no-results{padding:56px 20px;text-align:center;color:var(--ink-soft);}
 .no-results .big{font-size:30px;margin-bottom:8px;}
 
-/* drill-down */
+/* ─────────────── Workspace / Plant drill-down ─────────────── */
 .dd-header{background:linear-gradient(135deg,var(--navy-deep),var(--navy-mid));border-radius:var(--r);padding:26px 30px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
 .dd-header::after{content:"";position:absolute;right:-30px;bottom:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04);}
 .dd-header .dd-eyebrow{font-size:10px;opacity:.6;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
@@ -247,37 +220,31 @@ td.ws-name{max-width:140px;white-space:normal;font-size:11px;}
 .plant-card .pc-name{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.3;padding-right:20px;}
 .plant-card .pc-crown{position:absolute;top:12px;right:13px;font-size:14px;}
 .plant-card .pc-bar{height:7px;border-radius:5px;background:var(--line-soft);overflow:hidden;margin-bottom:6px;}
-.plant-card .pc-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--good),var(--navy));width:0;transition:width .8s cubic-bezier(.2,.8,.2,1);}
+.plant-card .pc-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--client),var(--navy));width:0;transition:width .8s cubic-bezier(.2,.8,.2,1);}
 .plant-card .pc-fill.full{background:linear-gradient(90deg,var(--gold),#e8b84b);}
 .plant-card .pc-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);font-family:var(--mono);}
 .plant-card .pc-dots{display:flex;gap:4px;flex-wrap:wrap;margin-top:11px;}
 .plant-card .pcd{width:8px;height:8px;border-radius:50%;background:#d5deea;}
 
-.cov-ring-wrap{display:flex;align-items:center;gap:22px;padding:20px 24px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px;box-shadow:var(--shadow-sm);flex-wrap:wrap;}
+.cov-ring-wrap{display:flex;align-items:center;gap:22px;padding:20px 24px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px;box-shadow:var(--shadow-sm);}
 .cov-ring{position:relative;width:88px;height:88px;flex-shrink:0;}
 .cov-ring svg{transform:rotate(-90deg);}
 .cov-ring .cr-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:17px;font-weight:700;color:var(--navy);}
-.cov-info{flex:1;min-width:240px;}
+.cov-info{flex:1;}
 .cov-info .ci-title{font-size:14px;font-weight:700;color:var(--navy-deep);margin-bottom:4px;}
 .cov-info .ci-goal{font-size:12.5px;color:var(--ink-soft);}
-.cov-info .ci-goal b{color:var(--good);}
+.cov-info .ci-goal b{color:var(--client);}
 .cov-info .ci-goal.done b{color:var(--gold);}
-.cov-info .ci-up{font-size:11.5px;color:var(--navy-mid);margin-top:5px;font-family:var(--mono);}
-.mod-detail{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:760px){.mod-detail{grid-template-columns:1fr;}}
-.md-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);border-top:3px solid var(--g);}
-.md-card.locked{opacity:.72;border-top-style:dashed;background:var(--lock-pale);}
-.md-card .md-head{padding:12px 16px;font-size:12px;font-weight:700;color:var(--g);display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--gp);}
-.md-card .md-head .md-lic{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;}
-.md-lic.on{background:#fff;color:var(--g);} .md-lic.off{background:var(--lock);color:#fff;}
-.md-card .md-body{padding:6px 16px;}
+.feat-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:860px){.feat-detail-grid{grid-template-columns:1fr;}}
+.fg-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);border-top:3px solid var(--g);}
+.fg-card .fg-head{padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g);display:flex;align-items:center;justify-content:space-between;background:var(--gp);}
+.fg-card .fg-body{padding:6px 16px;}
 .fr{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:12.5px;}
 .fr:last-child{border-bottom:none;}
-.fr .fr-name{font-weight:500;display:flex;align-items:center;gap:7px;}
+.fr .fr-name{font-weight:500;}
 .fr .fr-val{font-family:var(--mono);font-size:10.5px;padding:3px 11px;border-radius:999px;font-weight:600;}
-.fr-val.adopted{background:var(--client-pale);color:var(--client);}
-.fr-val.gap{background:var(--flag-pale);color:var(--flag);}
-.fr-val.locked{background:var(--lock-pale);color:var(--ink-faint);}
+.fr-val.on{background:var(--client-pale);color:var(--client);}
 .fr-val.off{background:var(--line-soft);color:var(--ink-faint);}
 .fr .fr-toggle{cursor:pointer;}
 
@@ -288,12 +255,13 @@ td.ws-name{max-width:140px;white-space:normal;font-size:11px;}
 .nav-back{background:var(--panel);color:var(--navy);}
 .nav-back:hover{background:var(--common-pale);border-color:var(--navy);}
 
+/* ─────────────── Footer (Peak-End: a warm close) ─────────────── */
 footer{margin-top:52px;padding:22px 0 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 footer .foot-msg{font-size:12.5px;color:var(--ink-soft);}
 footer .foot-msg b{color:var(--navy);}
 footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);}
 
-/* modal */
+/* ─────────────── Auth modal ─────────────── */
 .modal-backdrop{position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:300;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
 .modal-backdrop.hidden{display:none;}
 .modal{background:var(--panel);border-radius:18px;padding:30px 28px 24px;width:100%;max-width:380px;box-shadow:var(--shadow-lg);animation:pop .2s ease;}
@@ -314,43 +282,14 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 .modal .btn-unlock{flex:2;padding:11px;border-radius:10px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;}
 .modal .btn-unlock:hover{background:var(--navy-mid);}
 
+/* ─────────────── Toast (Peak-End micro-delight) ─────────────── */
 #toastWrap{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:400;display:flex;flex-direction:column;gap:8px;align-items:center;}
 .toast{background:var(--navy-deep);color:#fff;font-size:12.5px;font-weight:600;padding:11px 18px;border-radius:11px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:9px;animation:toastIn .25s ease;}
 .toast.good{background:var(--client);}
 .toast.err{background:var(--flag);}
 @keyframes toastIn{from{transform:translateY(14px);opacity:0;}to{transform:none;opacity:1;}}
 
-/* ── Lifecycle (Phase 2) ── */
-.stage-pill{font-family:var(--mono);font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
-.stage-pill .sd{width:6px;height:6px;border-radius:50%;background:currentColor;}
-.funnel{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:760px){.funnel{grid-template-columns:repeat(2,1fr);}}
-.fn-step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;cursor:pointer;transition:.14s;position:relative;border-left:4px solid var(--sc,var(--line));box-shadow:var(--shadow-sm);}
-.fn-step:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
-.fn-step.active{outline:2px solid var(--sc);outline-offset:1px;}
-.fn-step .fn-n{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--sc);}
-.fn-step .fn-l{font-size:12.5px;font-weight:700;margin-top:2px;}
-.fn-step .fn-d{font-size:10.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4;}
-.fn-step .fn-bar{height:5px;border-radius:4px;background:var(--line-soft);overflow:hidden;margin-top:9px;}
-.fn-step .fn-fill{height:100%;border-radius:4px;background:var(--sc);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1);}
-.fn-step .fn-arrow{position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:#c7d2e0;font-size:15px;z-index:1;background:var(--paper);}
-@media(max-width:760px){.fn-step .fn-arrow{display:none;}}
-/* stepper on plant page */
-.stepper{display:flex;align-items:center;margin:4px 0;flex-wrap:wrap;gap:4px 0;}
-.step{display:flex;align-items:center;gap:8px;}
-.step .sc{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);font-weight:700;background:var(--line-soft);color:var(--ink-faint);border:2px solid var(--line);}
-.step.done .sc{background:var(--good);color:#fff;border-color:var(--good);}
-.step.current .sc{background:var(--cc);color:#fff;border-color:var(--cc);box-shadow:0 0 0 4px var(--ccp);}
-.step .st-l{font-size:11px;font-weight:600;color:var(--ink-faint);}
-.step.done .st-l{color:var(--ink-soft);}
-.step.current .st-l{color:var(--ink);font-weight:700;}
-.step-line{width:24px;height:2px;background:var(--line);margin:0 6px;}
-.step-line.done{background:var(--good);}
-.nba{background:var(--gold-pale);border:1px solid #ecd9a8;border-radius:var(--r-sm);padding:12px 16px;font-size:12.5px;color:#6b540f;margin:14px 0 4px;}
-.nba b{color:#4d3d09;}
-.md-stage{font-family:var(--mono);font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:5px;}
-
-/* ── Search autocomplete + dedicated table page (merge from _NEW.html) ── */
+/* ── Search autocomplete + dedicated table page ── */
 .ac-wrap{position:relative;}
 .ac-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--shadow);z-index:120;max-height:300px;overflow-y:auto;display:none;padding:4px 0;}
 .ac-dropdown.open{display:block;}
@@ -360,7 +299,7 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 .ac-item mark{background:none;color:var(--navy);font-weight:700;}
 .ac-item .ac-tag{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--ink-faint);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ac-empty{padding:14px;font-size:12px;color:var(--ink-faint);text-align:center;}
-.open-table{margin-top:26px;display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--navy-deep),var(--navy-mid));border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow);flex-wrap:wrap;color:#fff;}
+.open-table{margin-top:6px;display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--navy-deep),var(--navy-mid));border-radius:14px;padding:20px 24px;box-shadow:0 4px 20px rgba(15,33,64,.12);flex-wrap:wrap;color:#fff;}
 .open-table .ot-ic{font-size:26px;}
 .open-table .ot-txt{flex:1;min-width:200px;}
 .open-table .ot-txt h3{margin:0 0 3px;font-size:15.5px;color:#fff;font-weight:800;letter-spacing:-.01em;}
@@ -376,533 +315,554 @@ footer .foot-meta{font-size:11px;color:var(--ink-faint);font-family:var(--mono);
 </head>
 <body>
 
-<div class="modal-backdrop hidden" id="authModal">
-  <div class="modal">
-    <div class="modal-icon">🔒</div>
-    <h2>Admin access</h2>
-    <p class="modal-sub">Enter the admin password to enable Edit Mode. Viewers can browse everything without signing in.</p>
-    <div class="pw-wrap">
-      <input class="pw-input" type="password" id="pwInput" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')submitPassword()">
-      <button class="eye-btn" id="eyeBtn" onclick="togglePwVisibility()" title="Show/hide">👁</button>
-    </div>
-    <div class="pw-error" id="pwError"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-unlock" onclick="submitPassword()">Unlock Edit Mode</button>
-    </div>
-  </div>
+<!-- View-only build — no admin/edit path in the public page -->
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p>Loading from Google Sheets…</p>
 </div>
 
-<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><p>Loading from Google Sheets…</p></div>
 <div id="toastWrap"></div>
 
 <header class="top">
   <div class="top-inner">
     <div class="brand"><img id="logoImg" src="assets/logo.png" alt="Digital Paani"></div>
     <div class="top-right">
-      <span class="admin-badge" id="adminBadge">VIEWER</span>
       <span class="top-meta" id="topMeta">—</span>
       <button class="icon-btn" id="syncBtn" onclick="loadData()">↻ Refresh</button>
     </div>
   </div>
 </header>
 
-<div class="mock-banner" id="mockBanner">
-  🧪 <b>Mock entitlements.</b> Per-plant module licensing is simulated (deterministic from plant name) until the real source is wired. Adoption, gap &amp; upsell numbers are illustrative — the model &amp; UI are real.
-  <button class="x" onclick="document.getElementById('mockBanner').style.display='none'">✕</button>
-</div>
-
 <div class="wrap">
   <div id="errorBanner" style="display:none" class="error-banner">⚠ <span id="errorMsg"></span></div>
 
-  <!-- HOME -->
+  <!-- ══ HOME ══ -->
   <div class="page active" id="pageHome">
     <div class="breadcrumb"><span class="bc-item active">🏠 Overview</span></div>
 
+    <!-- Hero: goal gradient + Von Restorff attention KPI -->
     <div class="hero">
       <div class="hero-main">
         <div class="hero-ring" id="heroRing"></div>
-        <div class="hero-copy"><h2>Adoption of what's licensed</h2><div class="goal" id="heroGoal">—</div></div>
+        <div class="hero-copy">
+          <h2>Feature adoption</h2>
+          <div class="goal" id="heroGoal">—</div>
+        </div>
       </div>
       <div class="hero-side">
-        <div class="kpi flag" id="kpiGap"></div>
-        <div class="kpi upsell" id="kpiUpsell"></div>
+        <div class="kpi flag" id="kpiAttention"></div>
+        <div class="kpi calm" id="kpiFull"></div>
       </div>
     </div>
 
+    <!-- Command bar -->
     <div class="command">
       <div class="command-row">
-        <div class="search-box ac-wrap"><span class="s-ic">🔍</span><input type="text" id="search" placeholder="Search plant or workspace…" autocomplete="off"><span class="s-key">/</span><div class="ac-dropdown" id="searchDropdown"></div></div>
+        <div class="search-box ac-wrap">
+          <span class="s-ic">🔍</span>
+          <input type="text" id="search" placeholder="Search plant or workspace…" autocomplete="off">
+          <span class="s-key">/</span>
+          <div class="ac-dropdown" id="searchDropdown"></div>
+        </div>
         <div class="presets" id="presets"></div>
         <button class="more-btn" id="moreBtn" onclick="toggleAdvanced()">⚙ Filters</button>
       </div>
       <div class="advanced" id="advanced">
-        <div class="adv-field"><label>Workspace</label><select id="workspaceFilter"><option value="">All workspaces</option></select></div>
-        <div class="adv-field"><label>Stage</label><select id="stageFilter"><option value="">All stages</option></select></div>
-        <div class="adv-field"><label>Module</label><select id="moduleFilter"><option value="">All modules</option></select></div>
-        <div class="adv-field"><label>Feature</label><select id="featureFilter"><option value="">All features</option></select></div>
-        <div class="adv-field"><label>Report frequency</label><select id="reportFreqFilter"><option value="">Any</option><option>Daily</option><option>Weekly</option><option>Monthly</option><option>All</option><option>None</option></select></div>
-        <button class="reset-link" id="resetBtn">↺ Reset</button>
-      </div>
-      <div class="legend">
-        <span class="li"><span class="dot adopted" style="--dc:var(--good)"></span>Adopted (licensed &amp; on)</span>
-        <span class="li"><span class="dot gap"></span>Gap (licensed, off)</span>
-        <span class="li"><span class="dot off"></span>Off (hardware not installed)</span>
-        <span class="li"><span class="lockmark">🔒</span>Not licensed (upsell)</span>
+        <div class="adv-field">
+          <label>Workspace</label>
+          <select id="workspaceFilter"><option value="">All workspaces</option></select>
+        </div>
+        <div class="adv-field">
+          <label>Feature</label>
+          <select id="featureFilter"><option value="">All features</option></select>
+        </div>
+        <div class="adv-field">
+          <label>Report frequency</label>
+          <select id="reportFreqFilter">
+            <option value="">Any</option>
+            <option>Daily</option><option>Weekly</option><option>Monthly</option><option>All</option><option>None</option>
+          </select>
+        </div>
+        <button class="reset-link" id="resetBtn">↺ Reset all filters</button>
       </div>
     </div>
 
+    <!-- Group adoption -->
     <section class="section">
-      <div class="section-head"><h3>Implementation pipeline</h3><span class="hint">every plant's rollout stage · click to filter</span></div>
-      <div class="funnel" id="funnel"></div>
+      <div class="section-head">
+        <h3>Adoption by area</h3>
+        <span class="hint">% of features enabled across plants in view</span>
+      </div>
+      <div class="group-grid" id="groupGrid"></div>
     </section>
 
+    <!-- Feature list -->
     <section class="section">
-      <div class="section-head"><h3>Adoption by product module</h3><span class="hint">among plants licensed for each module</span></div>
-      <div class="mod-grid" id="modGrid"></div>
-    </section>
-
-    <section class="section">
-      <div class="section-head"><h3>Every feature · adopted / gap / locked</h3><span class="hint">click to filter · sorted by adoption among the licensed</span></div>
+      <div class="section-head">
+        <h3>Every feature · lowest adoption first</h3>
+        <span class="hint">Click a feature to filter the table</span>
+      </div>
       <div class="feat-list" id="featList"></div>
     </section>
 
+    <!-- Table launch card -->
     <section class="section">
       <div class="open-table">
         <span class="ot-ic">📋</span>
-        <div class="ot-txt"><h3>Feature adoption table</h3><p>Full plant-by-plant breakdown — every feature, coverage &amp; rollout stage. Search, filter and edit directly.</p></div>
+        <div class="ot-txt"><h3>Feature adoption table</h3><p>Full plant-by-plant breakdown — every feature and coverage score. Search &amp; filter directly.</p></div>
         <button class="ot-btn" onclick="goTable()">View table <span id="tableBtnCount" class="mono"></span> →</button>
       </div>
     </section>
 
-    <footer><div class="foot-msg" id="footMsg">—</div><div class="foot-meta">Digital Paani · Feature Adoption Console</div></footer>
+    <footer>
+      <div class="foot-msg" id="footMsg">—</div>
+      <div class="foot-meta">Digital Paani · Feature Adoption Console</div>
+    </footer>
   </div>
 
-  <!-- WORKSPACE -->
-  <div class="page" id="pageWorkspace"><div class="breadcrumb" id="wsBreadcrumb"></div><div id="wsContent"></div><div class="nav-row" id="wsNavRow"></div></div>
-  <!-- PLANT -->
-  <div class="page" id="pagePlant"><div class="breadcrumb" id="plantBreadcrumb"></div><div id="plantContent"></div><div class="nav-row" id="plantNavRow"></div></div>
+  <!-- ══ WORKSPACE ══ -->
+  <div class="page" id="pageWorkspace">
+    <div class="breadcrumb" id="wsBreadcrumb"></div>
+    <div id="wsContent"></div>
+    <div class="nav-row" id="wsNavRow"></div>
+  </div>
 
-  <!-- TABLE -->
+  <!-- ══ PLANT ══ -->
+  <div class="page" id="pagePlant">
+    <div class="breadcrumb" id="plantBreadcrumb"></div>
+    <div id="plantContent"></div>
+    <div class="nav-row" id="plantNavRow"></div>
+  </div>
+
+  <!-- ══ TABLE ══ -->
   <div class="page" id="pageTable">
     <div class="breadcrumb"><span class="bc-item" onclick="goHome()">🏠 Overview</span><span class="bc-sep">›</span><span class="bc-item active">📋 Feature adoption table</span></div>
     <div class="section-head" style="margin-top:22px"><h3>Feature adoption table</h3><span class="hint" id="tableCount"></span></div>
     <div class="active-filters" id="activeFilters"></div>
-    <div class="edit-hint" id="editHint">✏ Edit Mode is ON — click a dot to toggle a feature (locked 🔒 cells can't be turned on until the plant is licensed). Changes save to the sheet instantly.</div>
     <div class="table-toolbar">
       <div class="search-box ac-wrap" style="flex:0 0 260px;max-width:260px"><span class="s-ic">🔍</span><input type="text" id="tblSearch" placeholder="Search plant or workspace…" autocomplete="off"></div>
-      <span class="admin-badge" id="adminBadge2" style="background:var(--common-pale);color:var(--navy);border-color:var(--common)">VIEWER</span>
       <div class="spacer"></div>
-      <button class="edit-toggle" id="editToggle" onclick="openEditModal()">✏ Edit Mode</button>
       <button class="ghost-btn" onclick="exportCSV()">⬇ Export CSV</button>
     </div>
-    <div class="table-wrap"><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div><div class="table-foot" id="tableFoot"></div></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="table-foot" id="tableFoot"></div>
+    </div>
     <div class="nav-row"><button class="nav-home" onclick="goHome()">🏠 Overview</button></div>
   </div>
+
 </div>
 
 <script>
-// ══════════ Config (data contract preserved) ══════════
+// ══════════════════ Config (preserved from original) ══════════════════
 const API = "https://script.google.com/a/macros/digitalpaani.com/s/AKfycbxFSHNmPjCEtZ8NLNNhGjQKQWJUCjzObmGXwiza8TPR88vfHGwUwstV6gU0lBaAV8elfA/exec";
-const ADMIN_PASSWORD = "digitalpaani@123";
-const REPORT_FREQS = ["Daily","Weekly","Monthly","All","None"];
 
-// ── Product modules (mirrors CloseTheLoop v2 Role Studio — 8 modules) ──
-const MODULES = [
-  {id:"core",     n:"Platform Core",         icon:"🧩", always:true},
-  {id:"ops",      n:"Issue Resolution",      icon:"🔧"},
-  {id:"tasks",    n:"Tasks & Shifts",        icon:"📋"},
-  {id:"data",     n:"Data & Lab",            icon:"🧪"},
-  {id:"analytics",n:"Dashboards & Analytics",icon:"📊"},
-  {id:"iot",      n:"IoT & Remote",          icon:"📡"},
-  {id:"inv",      n:"Inventory",             icon:"🧯"},
-  {id:"floc",     n:"Floc Detector",         icon:"🔬", noperm:true},
+const REPORT_FREQS  = ["Daily","Weekly","Monthly","All","None"];
+const FREQ_COLORS   = {Daily:"#0c8a7a",Weekly:"#2f8f8f",Monthly:"#6fb8b8",All:"#43a6a6",None:"#d5deea"};
+
+const clientBool    = ["Insight Digest(Whatsapp)","Dashboard Summary(Whatsapp)"];
+const operatorFeats = ["OCR Data Input","Data Input","Task List"];
+const commonFeats   = ["Visualiation","Insights","Dashboard","Inventory","Tickets","Remote Control","Floc Detector","Events"];
+const allBool       = [...clientBool, ...operatorFeats, ...commonFeats];   // 13 booleans
+const TOTAL_FEATS   = allBool.length + 1;                                   // +1 for Reports = 14
+
+// Group model — one source of truth used everywhere (Law of Similarity)
+const GROUPS = [
+  {key:"client",   label:"Client-side",   feats:["Reports", ...clientBool] },
+  {key:"operator", label:"Operator-side", feats:operatorFeats },
+  {key:"common",   label:"Common",        feats:commonFeats },
 ];
-const modById = Object.fromEntries(MODULES.map(m=>[m.id,m]));
-const SELLABLE = MODULES.filter(m=>!m.always).map(m=>m.id);
+function featGroup(f){
+  if(f==="Reports"||clientBool.includes(f)) return "client";
+  if(operatorFeats.includes(f)) return "operator";
+  return "common";
+}
 
-// ── Feature → module mapping (EDITABLE CONFIG, not hard logic).
-//    key      = exact Google-Sheet field
-//    modules  = every v2 module the feature's permissions touch (AND to be "licensed")
-//    type     = 'gated' | 'cross' | 'entitlement'
-//    grp      = module used for table column grouping (display only)
-//    status   = 'retired' → excluded from adoption maths
-//    freq     = true for the Reports frequency field
-const FEATURES = [
-  {key:"Dashboard",                  short:"Dashboard",   modules:["core"],              type:"gated",       grp:"core"},
-  {key:"Tickets",                    short:"Tickets",     modules:["ops"],               type:"gated",       grp:"ops"},
-  {key:"Task List",                  short:"Tasks",       modules:["tasks"],             type:"gated",       grp:"tasks"},
-  {key:"Data Input",                 short:"Data In",     modules:["data"],              type:"gated",       grp:"data"},
-  {key:"OCR Data Input",             short:"OCR",         modules:["data","analytics"],  type:"cross",       grp:"data"},
-  {key:"Reports",                    short:"Reports",     modules:["analytics"],         type:"gated",       grp:"analytics", freq:true},
-  {key:"Insights",                   short:"Insights",    modules:["analytics"],         type:"gated",       grp:"analytics"},
-  {key:"Events",                     short:"Events",      modules:["analytics"],         type:"gated",       grp:"analytics"},
-  {key:"Insight Digest(Whatsapp)",   short:"Insight WA",  modules:["analytics"],         type:"cross",       grp:"analytics"},
-  {key:"Dashboard Summary(Whatsapp)",short:"Dash WA",     modules:["analytics"],         type:"cross",       grp:"analytics"},
-  {key:"Visualiation",               short:"Visualisation",modules:["core","analytics"], type:"gated",       grp:"analytics", status:"retired"},
-  {key:"Remote Control",             short:"Remote",      modules:["iot"],               type:"gated",       grp:"iot"},
-  {key:"Inventory",                  short:"Inventory",   modules:["inv"],               type:"gated",       grp:"inv"},
-  {key:"Floc Detector",              short:"Floc",        modules:["floc"],              type:"entitlement", grp:"floc"},
-];
-const activeFeatures = FEATURES.filter(f=>f.status!=="retired");
-const TYPE_LABEL = {cross:"cross-module", entitlement:"hardware"};
+// ══════════════════ State ══════════════════
+let records  = [];
+let prevPage = null;   // 'home' | 'workspace:<name>'
+let state = {search:"", workspace:"", feature:"", reportFreq:"", preset:"all"};
 
-// ── Implementation lifecycle (Phase 2) ──
-const STAGES = [
-  {id:"not_started", n:"Not started", c:"var(--flag)",   pale:"var(--flag-pale)",   d:"Licensed — nothing switched on yet"},
-  {id:"in_progress", n:"In progress", c:"var(--gold)",   pale:"var(--gold-pale)",   d:"Some licensed features live"},
-  {id:"live",        n:"Live",        c:"var(--good)",    pale:"var(--client-pale)", d:"All licensed features switched on"},
-  {id:"healthy",     n:"Healthy",     c:"#1a7a4a",        pale:"#d9efe2",            d:"Live and actively used"},
-];
-const stageById = Object.fromEntries(STAGES.map(s=>[s.id,s]));
-const stageIndex = Object.fromEntries(STAGES.map((s,i)=>[s.id,i]));
-
-// ══════════ State ══════════
-let records=[], editMode=false, isAdmin=false, prevPage=null;
-let state={search:"", workspace:"", module:"", feature:"", reportFreq:"", stage:"", preset:"all"};
-
-// ══════════ Helpers ══════════
-function pct(n,d){ return d?Math.round((n/d)*1000)/10:0; }
+// ══════════════════ Helpers ══════════════════
+function pct(n,d){ return d ? Math.round((n/d)*1000)/10 : 0; }
 function escHtml(s){ return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function esc(s){ return String(s??"").replace(/'/g,"\\'"); }
-function onFlag(r,f){ return f.freq ? r.reportsType!=="None" : !!r[f.key]; }
-function modColor(id){ return `var(--m-${id})`; }
+function isOn(r,f){ return f==="Reports" ? r.reportsType!=="None" : !!r[f]; }
+function coverage(r){ return allBool.filter(f=>r[f]).length + (r.reportsType!=="None"?1:0); }
+function covPct(r){ return pct(coverage(r), TOTAL_FEATS); }
+function groupColor(key){ return getComputedStyle(document.documentElement).getPropertyValue("--"+key).trim(); }
+function groupAdoption(rows,feats){ return rows.length ? pct(rows.reduce((s,r)=>s+feats.filter(f=>isOn(r,f)).length,0), rows.length*feats.length) : 0; }
 
-// ── MOCK entitlement (swap this one function for the real source) ──
-function hashStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
-function entitlement(r){
-  if(r.__ent) return r.__ent;
-  const lic=new Set(["core"]);
-  // consistency: any feature that's ON implies its modules are licensed
-  activeFeatures.forEach(f=>{ if(onFlag(r,f)) f.modules.forEach(m=>lic.add(m)); });
-  // deterministic extras → creates licensed-but-off gaps AND leaves some unlicensed (upsell)
-  const h=hashStr(r.plant||("row"+r.rowIndex));
-  SELLABLE.forEach((m,i)=>{ if((h>>(i*2))&1) lic.add(m); });
-  r.__ent=lic; return lic;
-}
-function isLicensed(r,f){
-  if(f.type==="entitlement") return onFlag(r,f);   // hardware: the flag IS the entitlement
-  return f.modules.every(m=>entitlement(r).has(m));
-}
-// state ∈ adopted | gap | locked | off | retired
-function featState(r,f){
-  if(f.status==="retired") return "retired";
-  if(f.type==="entitlement") return onFlag(r,f) ? "adopted" : "off";
-  if(!isLicensed(r,f)) return "locked";
-  return onFlag(r,f) ? "adopted" : "gap";
-}
-function statesOf(r){ return FEATURES.map(f=>({f,s:featState(r,f)})); }
-function adoptedCount(r){ return statesOf(r).filter(x=>x.s==="adopted").length; }
-function licensedCount(r){ return statesOf(r).filter(x=>x.s==="adopted"||x.s==="gap").length; } // denominator (entitlement adopted counts via adopted)
-function denomCount(r){ return statesOf(r).filter(x=>x.s==="adopted"||x.s==="gap").length; }
-function covPct(r){ return pct(adoptedCount(r), denomCount(r)); }
-function gapCount(r){ return statesOf(r).filter(x=>x.s==="gap").length; }
-function upsellMods(r){ const lic=entitlement(r); return SELLABLE.filter(m=>!lic.has(m)); }
-function isFull(r){ return denomCount(r)>0 && adoptedCount(r)===denomCount(r); }
-// MOCK usage/health signal — replace with PostHog "active in last 30d" (Phase 4)
-function mockHealthy(r){ return (hashStr((r.plant||"")+"|health")%100) < 62; }
-const flocFeat = FEATURES.find(f=>f.key==="Floc Detector");
-// Pipeline stage = rollout BREADTH: how many licensed modules have been provisioned
-// (≥1 feature switched on). Depth (which features) is the adoption % / coverage ring.
-function plantModulesState(r){
-  let prov=0, tot=0;
-  MODULES.forEach(m=>{
-    const licensed = m.id==="floc" ? onFlag(r,flocFeat) : (m.always || entitlement(r).has(m.id));
-    if(!licensed) return;
-    tot++;
-    const on = m.id==="floc" ? onFlag(r,flocFeat) : activeFeatures.filter(f=>f.grp===m.id).some(f=>onFlag(r,f));
-    if(on) prov++;
-  });
-  return {prov,tot};
-}
-function stageOf(r){
-  const {prov,tot}=plantModulesState(r);
-  if(prov===0) return "not_started";
-  if(prov<tot) return "in_progress";
-  return mockHealthy(r) ? "healthy" : "live";
-}
-function isLive(r){ const s=stageOf(r); return s==="live"||s==="healthy"; }
-function moduleStage(r,m){
-  if(m.id==="floc") return onFlag(r,FEATURES.find(f=>f.key==="Floc Detector")) ? "live" : "not_started";
-  if(!(m.always || entitlement(r).has(m.id))) return "not_licensed";
-  const feats=activeFeatures.filter(f=>f.grp===m.id);
-  let ad=0,dn=0; feats.forEach(f=>{ const s=featState(r,f); if(s==="adopted"){ad++;dn++;} else if(s==="gap")dn++; });
-  if(dn===0) return "live";
-  if(ad===0) return "not_started";
-  if(ad<dn) return "in_progress";
-  return mockHealthy(r) ? "healthy" : "live";
-}
-function nextBestFeatures(r){ return statesOf(r).filter(x=>x.s==="gap").map(x=>x.f.short); }
-function unprovisionedModules(r){
-  return MODULES.filter(m=>{
-    const licensed = m.id==="floc" ? onFlag(r,flocFeat) : (m.always||entitlement(r).has(m.id));
-    if(!licensed) return false;
-    const on = m.id==="floc" ? onFlag(r,flocFeat) : activeFeatures.filter(f=>f.grp===m.id).some(f=>onFlag(r,f));
-    return !on;
-  }).map(m=>m.n);
-}
-
-function ring(pctVal,size,stroke,color,track){
-  const rr=(size-stroke)/2, c=2*Math.PI*rr, off=c*(1-pctVal/100);
+// ring builder (goal gradient)
+function ring(pctVal, size, stroke, color, track){
+  const r=(size-stroke)/2, c=2*Math.PI*r, off=c*(1-pctVal/100);
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <circle cx="${size/2}" cy="${size/2}" r="${rr}" fill="none" stroke="${track}" stroke-width="${stroke}"/>
-    <circle cx="${size/2}" cy="${size/2}" r="${rr}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-linecap="round"
-      stroke-dasharray="${c}" stroke-dashoffset="${c}" style="transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)" data-target="${off}"/></svg>`;
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+      stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}"
+      style="transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)" data-target="${off}"/>
+  </svg>`;
 }
-function animateRings(scope){ (scope||document).querySelectorAll("circle[data-target]").forEach(c=>{ requestAnimationFrame(()=>requestAnimationFrame(()=>{ c.style.strokeDashoffset=c.getAttribute("data-target"); })); }); }
-function animateBars(scope){ (scope||document).querySelectorAll("[data-w]").forEach(el=>{ requestAnimationFrame(()=>requestAnimationFrame(()=>{ el.style.width=el.getAttribute("data-w")+"%"; })); }); }
+function animateRings(scope){
+  (scope||document).querySelectorAll("circle[data-target]").forEach(c=>{
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ c.style.strokeDashoffset=c.getAttribute("data-target"); }));
+  });
+}
+function animateBars(scope){
+  (scope||document).querySelectorAll("[data-w]").forEach(el=>{
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ el.style.width=el.getAttribute("data-w")+"%"; }));
+  });
+}
 
-function toast(msg,kind){ const w=document.getElementById("toastWrap"); const t=document.createElement("div"); t.className="toast"+(kind?" "+kind:""); t.innerHTML=msg; w.appendChild(t); setTimeout(()=>{ t.style.transition="opacity .3s,transform .3s"; t.style.opacity="0"; t.style.transform="translateY(10px)"; setTimeout(()=>t.remove(),300); },2400); }
+// ══════════════════ Toast ══════════════════
+function toast(msg, kind){
+  const wrap=document.getElementById("toastWrap");
+  const t=document.createElement("div");
+  t.className="toast"+(kind?" "+kind:"");
+  t.innerHTML=msg;
+  wrap.appendChild(t);
+  setTimeout(()=>{ t.style.transition="opacity .3s, transform .3s"; t.style.opacity="0"; t.style.transform="translateY(10px)"; setTimeout(()=>t.remove(),300); }, 2400);
+}
 
-// ══════════ Data ══════════
+// ══════════════════ Data ══════════════════
 async function loadData(){
   document.getElementById("loadingOverlay").style.display="flex";
   document.getElementById("errorBanner").style.display="none";
-  const btn=document.getElementById("syncBtn"); btn.classList.add("syncing"); btn.textContent="↻ Loading…";
+  const btn=document.getElementById("syncBtn");
+  btn.classList.add("syncing"); btn.textContent="↻ Loading…";
   try{
-    const res=await fetch(API); const json=await res.json();
+    const res=await fetch(API);
+    const json=await res.json();
     if(!json.success) throw new Error(json.error||"Script error");
-    records=json.records; records.forEach(r=>delete r.__ent);
-    populateControls(); render();
-  }catch(e){ showError("Could not load from Google Sheets: "+e.message+". Make sure the Apps Script is deployed for Anyone."); }
-  finally{ document.getElementById("loadingOverlay").style.display="none"; btn.classList.remove("syncing"); btn.textContent="↻ Refresh"; }
+    records=json.records;
+    populateControls();
+    render();
+  }catch(e){
+    showError("Could not load from Google Sheets: "+e.message+". Make sure the Apps Script is deployed for Anyone.");
+  }finally{
+    document.getElementById("loadingOverlay").style.display="none";
+    btn.classList.remove("syncing"); btn.textContent="↻ Refresh";
+  }
 }
-function showError(msg){ document.getElementById("errorBanner").style.display="flex"; document.getElementById("errorMsg").textContent=msg; }
-async function saveField(rowIndex,field,value,indicatorEl){
-  if(indicatorEl){ indicatorEl.className="save-indicator saving"; indicatorEl.textContent="saving…"; }
-  try{
-    const res=await fetch(API,{method:"POST",body:JSON.stringify({rowIndex,field,value})}); const json=await res.json();
-    if(!json.success) throw new Error(json.error);
-    if(indicatorEl){ indicatorEl.className="save-indicator saved"; indicatorEl.textContent="saved ✓"; setTimeout(()=>{ if(indicatorEl) indicatorEl.textContent=""; },1800); }
-    toast("✓ Saved to sheet","good");
-  }catch(e){ if(indicatorEl){ indicatorEl.className="save-indicator error"; indicatorEl.textContent="error!"; } toast("✕ Save failed","err"); showError("Save failed: "+e.message); }
+function showError(msg){
+  document.getElementById("errorBanner").style.display="flex";
+  document.getElementById("errorMsg").textContent=msg;
 }
 
-// ══════════ Controls ══════════
+// ══════════════════ Controls ══════════════════
 function populateControls(){
   const wsSet=[...new Set(records.map(r=>r.workspace))].sort();
-  document.getElementById("workspaceFilter").innerHTML='<option value="">All workspaces</option>'+wsSet.map(w=>`<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("");
-  document.getElementById("moduleFilter").innerHTML='<option value="">All modules</option>'+MODULES.map(m=>`<option value="${m.id}">${m.icon} ${escHtml(m.n)}</option>`).join("");
-  document.getElementById("stageFilter").innerHTML='<option value="">All stages</option>'+STAGES.map(s=>`<option value="${s.id}">${escHtml(s.n)}</option>`).join("");
-  document.getElementById("featureFilter").innerHTML='<option value="">All features</option>'+activeFeatures.map(f=>`<option value="${escHtml(f.key)}">${escHtml(f.short)}</option>`).join("");
+  const wsSel=document.getElementById("workspaceFilter");
+  wsSel.innerHTML='<option value="">All workspaces</option>'+wsSet.map(w=>`<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("");
+  const fSel=document.getElementById("featureFilter");
+  fSel.innerHTML='<option value="">All features</option>'+["Reports",...clientBool,...operatorFeats,...commonFeats]
+    .map(f=>`<option value="${escHtml(f)}">${escHtml(f)} (${featGroup(f)})</option>`).join("");
   document.getElementById("topMeta").textContent=`${records.length} plants · ${wsSet.length} workspaces`;
 }
+
+// filters WITHOUT the preset (used to count presets)
 function baseFiltered(){
   const q=state.search.trim().toLowerCase();
   return records.filter(r=>{
     if(state.workspace && r.workspace!==state.workspace) return false;
-    if(state.module && !entitlement(r).has(state.module)) return false;
-    if(state.feature){ const f=FEATURES.find(x=>x.key===state.feature); if(f && !onFlag(r,f)) return false; }
+    if(state.feature){ if(state.feature==="Reports"){ if(r.reportsType==="None") return false; } else if(!r[state.feature]) return false; }
     if(state.reportFreq && r.reportsType!==state.reportFreq) return false;
-    if(state.stage && stageOf(r)!==state.stage) return false;
     if(q && !(r.plant.toLowerCase().includes(q) || (r.workspace||"").toLowerCase().includes(q))) return false;
     return true;
   });
 }
 function applyPreset(rows){
-  if(state.preset==="worklist") return rows.filter(r=>["not_started","in_progress"].includes(stageOf(r)));
-  if(state.preset==="full")     return rows.filter(r=>isLive(r));
-  if(state.preset==="upsell")   return rows.filter(r=>upsellMods(r).length>0);
+  if(state.preset==="attention") return rows.filter(r=>covPct(r)<50);
+  if(state.preset==="zero")      return rows.filter(r=>coverage(r)===0);
+  if(state.preset==="full")      return rows.filter(r=>coverage(r)===TOTAL_FEATS);
   return rows;
 }
 function getFiltered(){ return applyPreset(baseFiltered()); }
 
-// ══════════ Render ══════════
+// ══════════════════ Render orchestrator ══════════════════
 function render(){
-  renderHero(); renderPresets();
+  renderHero();
+  renderPresets();
   const f=getFiltered();
-  renderFunnel(f); renderModules(f); renderFeatures(f); renderTable(f); renderFoot(f);
+  renderGroups(f);
+  renderFeatures(f);
+  renderTable(f);
+  renderFoot(f);
   animateBars(); animateRings();
 }
 
+// ── Hero (goal gradient + Von Restorff) ──
 function renderHero(){
   const all=records;
-  const ad=all.reduce((s,r)=>s+adoptedCount(r),0), dn=all.reduce((s,r)=>s+denomCount(r),0);
-  const overall=pct(ad,dn), remaining=Math.max(0,100-overall);
-  document.getElementById("heroRing").innerHTML=ring(overall,132,12,"#8fe0d3","rgba(255,255,255,.16)")+`<div class="ring-center"><div class="ring-pct">${overall}%</div><div class="ring-lbl">of licensed</div></div>`;
-  document.getElementById("heroGoal").innerHTML= all.length
-    ? `Of everything these <b>${all.length} plants</b> are licensed for, <b>${overall}%</b> is switched on. Adoption is measured against what each plant actually bought — not all 14 features.`
-    : "No plants loaded yet.";
+  const overall = all.length ? pct(all.reduce((s,r)=>s+coverage(r),0), all.length*TOTAL_FEATS) : 0;
+  const remaining = Math.max(0, 100-overall);
+  const col = groupColor("client");
+  document.getElementById("heroRing").innerHTML =
+    ring(overall,132,12,"#8fe0d3","rgba(255,255,255,.16)")+
+    `<div class="ring-center"><div class="ring-pct">${overall}%</div><div class="ring-lbl">Adopted</div></div>`;
+  document.getElementById("heroGoal").innerHTML =
+    all.length
+      ? `Across <b>${all.length} plants</b>, <b>${remaining}%</b> of feature slots are still empty. Every dot you switch on moves this ring toward 100%.`
+      : `No plants loaded yet.`;
 
-  const gapPlants=all.filter(r=>gapCount(r)>0).length;
-  const totalGaps=all.reduce((s,r)=>s+gapCount(r),0);
-  document.getElementById("kpiGap").innerHTML=`<span class="kpi-ic">⚠️</span><div class="kpi-num">${totalGaps}</div><div class="kpi-txt"><div class="kpi-lbl">Adoption gaps</div><div class="kpi-sub">licensed-but-off · across ${gapPlants} plants → CS/Implementation</div></div>`;
-  document.getElementById("kpiGap").onclick=()=>{ setPreset("worklist"); scrollToTable(); };
-
-  const upsellPlants=all.filter(r=>upsellMods(r).length>0).length;
-  const totalUpsell=all.reduce((s,r)=>s+upsellMods(r).length,0);
-  document.getElementById("kpiUpsell").innerHTML=`<span class="kpi-ic">🛒</span><div class="kpi-num">${totalUpsell}</div><div class="kpi-txt"><div class="kpi-lbl">Upsell surface</div><div class="kpi-sub">unlicensed modules · across ${upsellPlants} plants → Sales</div></div>`;
-  document.getElementById("kpiUpsell").onclick=()=>{ setPreset("upsell"); scrollToTable(); };
+  const attn = all.filter(r=>covPct(r)<50).length;
+  const full = all.filter(r=>coverage(r)===TOTAL_FEATS).length;
+  document.getElementById("kpiAttention").innerHTML =
+    `<span class="kpi-ic">⚠️</span><div class="kpi-num">${attn}</div><div class="kpi-txt"><div class="kpi-lbl">Need attention</div><div class="kpi-sub">below 50% coverage — start here</div></div>`;
+  document.getElementById("kpiAttention").onclick=()=>{ setPreset("attention"); scrollToTable(); };
+  document.getElementById("kpiAttention").style.cursor="pointer";
+  document.getElementById("kpiFull").innerHTML =
+    `<span class="kpi-ic" style="font-size:20px">🏆</span><div class="kpi-num">${full}</div><div class="kpi-txt"><div class="kpi-lbl">Fully adopted</div><div class="kpi-sub">all ${TOTAL_FEATS} features live</div></div>`;
+  document.getElementById("kpiFull").onclick=()=>{ setPreset("full"); scrollToTable(); };
+  document.getElementById("kpiFull").style.cursor="pointer";
 }
 
+// ── Presets (Hick + Tesler: system pre-computes the useful views) ──
 function renderPresets(){
   const base=baseFiltered();
-  const counts={ all:base.length, worklist:base.filter(r=>["not_started","in_progress"].includes(stageOf(r))).length, full:base.filter(r=>isLive(r)).length, upsell:base.filter(r=>upsellMods(r).length>0).length };
-  const defs=[ {k:"all",l:"All plants",c:""},{k:"worklist",l:"Rollout worklist 🛠",c:"attn"},{k:"full",l:"Live 🏆",c:""},{k:"upsell",l:"Upsell targets 🛒",c:""} ];
-  document.getElementById("presets").innerHTML=defs.map(d=>`<button class="preset ${d.c} ${state.preset===d.k?"active":""}" onclick="setPreset('${d.k}')">${d.l} <span class="cnt">${counts[d.k]}</span></button>`).join("");
+  const counts={
+    all: base.length,
+    attention: base.filter(r=>covPct(r)<50).length,
+    zero: base.filter(r=>coverage(r)===0).length,
+    full: base.filter(r=>coverage(r)===TOTAL_FEATS).length,
+  };
+  const defs=[
+    {key:"all",       label:"All plants", cls:""},
+    {key:"attention", label:"Need attention", cls:"attn"},
+    {key:"zero",      label:"Zero features", cls:""},
+    {key:"full",      label:"Fully adopted 🏆", cls:""},
+  ];
+  document.getElementById("presets").innerHTML=defs.map(d=>
+    `<button class="preset ${d.cls} ${state.preset===d.key?"active":""}" onclick="setPreset('${d.key}')">${d.label} <span class="cnt">${counts[d.key]}</span></button>`
+  ).join("");
 }
-function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; if(state.preset!=="all") state.stage=""; render(); if(state.preset!=="all") goTable(); }
+function setPreset(k){ state.preset=(state.preset===k&&k!=="all")?"all":k; render(); if(state.preset!=="all") goTable(); }
 
-// lifecycle pipeline
-function renderFunnel(rows){
-  const counts=Object.fromEntries(STAGES.map(s=>[s.id,0]));
-  rows.forEach(r=>counts[stageOf(r)]++);
-  const total=rows.length||1;
-  document.getElementById("funnel").innerHTML=STAGES.map((s,i)=>{
-    const n=counts[s.id], last=i===STAGES.length-1;
-    return `<div class="fn-step ${state.stage===s.id?"active":""}" style="--sc:${s.c}" onclick="setStage('${s.id}')">
-      ${!last?'<span class="fn-arrow">→</span>':''}
-      <div class="fn-n">${n}</div>
-      <div class="fn-l">${s.n}</div>
-      <div class="fn-d">${s.d}</div>
-      <div class="fn-bar"><div class="fn-fill" data-w="${pct(n,total)}"></div></div>
-    </div>`;
-  }).join("");
-}
-function setStage(id){ state.stage=state.stage===id?"":id; state.preset="all"; const sf=document.getElementById("stageFilter"); if(sf) sf.value=state.stage; render(); scrollToTable(); }
-
-// module-level adoption
-function moduleStats(rows,m){
-  const feats=activeFeatures.filter(f=>f.modules.includes(m.id));
-  if(m.id==="floc"){ const f=FEATURES.find(x=>x.key==="Floc Detector"); const inst=rows.filter(r=>onFlag(r,f)).length; return {licPlants:inst,pct:pct(inst,rows.length),upsell:rows.length-inst,hardware:true,denom:rows.length,adopted:inst}; }
-  const licPlants=rows.filter(r=>entitlement(r).has(m.id));
-  let ad=0,dn=0;
-  licPlants.forEach(r=>feats.forEach(f=>{ const s=featState(r,f); if(s==="adopted"){ad++;dn++;} else if(s==="gap"){dn++;} }));
-  return {licPlants:licPlants.length,pct:pct(ad,dn),adopted:ad,denom:dn,upsell:rows.length-licPlants.length};
-}
-function renderModules(rows){
-  let html=MODULES.map(m=>{
-    const st=moduleStats(rows,m), c=modColor(m.id);
-    const upsellTxt = m.always ? `ships with every plant` : (st.hardware ? `${st.upsell} not installed` : `${st.upsell} plants → upsell`);
-    return `<div class="mod-card ${st.hardware?"hw":""}" style="--g:${c}">
-      <div class="mc-top"><div class="mc-name"><span class="mc-ic">${m.icon}</span>${escHtml(m.n)} ${st.hardware?'<span class="hw-tag">HW</span>':''}</div><div class="mc-pct">${st.pct}%</div></div>
-      <div class="mc-bar"><div class="mc-fill" data-w="${st.pct}"></div></div>
-      <div class="mc-meta"><span>${st.hardware?"installed":"licensed"}: ${st.licPlants}/${rows.length}</span><span>${st.hardware?st.adopted+" on":st.adopted+"/"+st.denom+" on"}</span></div>
-      <div class="mc-up">${upsellTxt}</div>
-    </div>`;
-  }).join("");
-  if(rows.length){
-    const sellable=MODULES.filter(m=>!m.always).map(m=>({m,st:moduleStats(rows,m)})).sort((a,b)=>a.st.pct-b.st.pct);
-    const low=sellable[0];
-    if(low) html+=`<div class="insight"><span class="in-ic">🎯</span><div class="in-txt"><b>${low.m.icon} ${escHtml(low.m.n)}</b> has the lowest adoption among licensed plants (<b>${low.st.pct}%</b>) with <b>${low.st.denom-low.st.adopted}</b> licensed-but-off slots. Fastest lift lives here.</div></div>`;
-  }
-  document.getElementById("modGrid").innerHTML=html;
-}
-
-function renderFeatures(rows){
-  const data=activeFeatures.map(f=>{
-    let ad=0,gap=0,lock=0,off=0;
-    rows.forEach(r=>{ const s=featState(r,f); if(s==="adopted")ad++; else if(s==="gap")gap++; else if(s==="locked")lock++; else if(s==="off")off++; });
-    const denom=ad+gap; return {f,ad,gap,lock,off,rate:pct(ad,denom||1),denom};
-  }).sort((a,b)=> (a.denom?a.rate:999)-(b.denom?b.rate:999));
-  const n=rows.length||1;
-  const lowestKey = data.find(d=>d.denom)?.f.key;
-  let html=data.map(d=>{
-    const f=d.f, c=modColor(f.grp);
-    const low = f.key===lowestKey;
-    const typeTag = f.type!=="gated" ? `<span class="type-tag">${TYPE_LABEL[f.type]}</span>` : "";
-    const denomLabel = f.type==="entitlement" ? `${d.ad}/${n} installed` : `${d.ad}/${d.denom} of licensed`;
-    return `<div class="feat-item ${state.feature===f.key?"selected":""} ${low?"lowest":""}" onclick="filterByFeature('${esc(f.key)}')">
-      <div class="fi-name">${escHtml(f.short)}${low?'<span class="low-tag">LOWEST</span>':''}${typeTag}</div>
-      <div><span class="chip" style="background:var(--m-${f.grp}-pale);color:${c}">${escHtml(modById[f.grp].n)}</span></div>
-      <div class="fi-track">
-        <div class="seg adopted" style="width:0" data-w="${pct(d.ad,n)}" title="Adopted ${d.ad}"></div>
-        <div class="seg gap" style="width:0" data-w="${pct(d.gap,n)}" title="Gap ${d.gap}"></div>
-        <div class="seg locked" style="width:0" data-w="${pct(d.lock,n)}" title="Locked ${d.lock}"></div>
+// ── Group adoption cards + biggest-gap insight (Von Restorff) ──
+function renderGroups(rows){
+  const data=GROUPS.map(g=>({...g, pct:groupAdoption(rows,g.feats)}));
+  let html=data.map(g=>{
+    const c=`var(--${g.key})`;
+    const onCells=rows.reduce((s,r)=>s+g.feats.filter(f=>isOn(r,f)).length,0);
+    return `<div class="group-card" style="--g:${c}">
+      <div class="gc-top">
+        <div class="gc-name"><span class="gc-dot"></span>${g.label}</div>
+        <div class="gc-pct">${g.pct}%</div>
       </div>
-      <div class="fi-nums"><b>${d.type==="entitlement"?pct(d.ad,n):d.rate}%</b><br>${denomLabel}${d.lock?` · 🔒${d.lock}`:""}</div>
+      <div class="gc-bar"><div class="gc-fill" data-w="${g.pct}"></div></div>
+      <div class="gc-meta"><span>${g.feats.length} features</span><span>${onCells}/${rows.length*g.feats.length} enabled</span></div>
     </div>`;
   }).join("");
-  // retired features appended, dimmed
-  FEATURES.filter(f=>f.status==="retired").forEach(f=>{
-    const on=rows.filter(r=>onFlag(r,f)).length;
-    html+=`<div class="feat-item retired" title="Retired in v2 — superseded by the plant dashboard">
-      <div class="fi-name">${escHtml(f.short)}<span class="type-tag">retired</span></div>
-      <div><span class="chip" style="background:var(--lock-pale);color:var(--ink-faint)">legacy</span></div>
-      <div class="fi-track"></div>
-      <div class="fi-nums">${on}/${rows.length} on<br>excluded from maths</div></div>`;
-  });
-  document.getElementById("featList").innerHTML=html;
+  // biggest gap callout
+  if(rows.length){
+    const sorted=[...data].sort((a,b)=>a.pct-b.pct);
+    const low=sorted[0], high=sorted[sorted.length-1];
+    const gap=high.pct-low.pct;
+    if(gap>=1){
+      html+=`<div class="insight"><span class="in-ic">🎯</span><div class="in-txt"><b>${low.label}</b> is your biggest opportunity — ${low.pct}% adopted, <b>${gap} points</b> behind ${high.label} (${high.pct}%). Focus enablement here for the fastest lift.</div></div>`;
+    }
+  }
+  document.getElementById("groupGrid").innerHTML=html;
 }
-function filterByFeature(k){ state.feature=state.feature===k?"":k; document.getElementById("featureFilter").value=state.feature; render(); scrollToTable(); }
 
-// table
+// ── Feature list, lowest first (Tesler: system sorts by what needs work) ──
+function renderFeatures(rows){
+  const feats=["Reports",...clientBool,...operatorFeats,...commonFeats].map(f=>{
+    const cnt=rows.filter(r=>isOn(r,f)).length;
+    return {f, grp:featGroup(f), cnt, pct:pct(cnt,rows.length)};
+  }).sort((a,b)=>a.pct-b.pct);
+  const lowest = feats.length ? feats[0].pct : -1;
+  document.getElementById("featList").innerHTML=feats.map((x,i)=>{
+    const c=`var(--${x.grp})`;
+    const low = i===0 && rows.length && x.pct<=lowest;
+    return `<div class="feat-item ${state.feature===x.f?"selected":""} ${low?"lowest":""}" onclick="filterByFeature('${esc(x.f)}')">
+      <div class="fi-name">${escHtml(x.f)}${low?'<span class="low-tag">LOWEST</span>':''}</div>
+      <div><span class="chip ${x.grp}">${x.grp}</span></div>
+      <div class="fi-bar"><div class="fi-fill" style="background:${c}" data-w="${x.pct}"></div></div>
+      <div><div class="fi-pct">${x.pct}%</div><div class="fi-cnt">${x.cnt}/${rows.length}</div></div>
+    </div>`;
+  }).join("");
+}
+function filterByFeature(f){
+  state.feature = state.feature===f ? "" : f;
+  document.getElementById("featureFilter").value=state.feature;
+  render(); scrollToTable();
+}
+
+// ── Plant table ──
 function renderTable(rows){
   rows=[...rows].sort((a,b)=>covPct(b)-covPct(a));
-  const cols=FEATURES; // module-ordered
+  const cols=[...clientBool,...operatorFeats,...commonFeats];
   // grouped header
-  const groups=[]; let cur=null;
-  cols.forEach(f=>{ if(!cur||cur.grp!==f.grp){ cur={grp:f.grp,n:1}; groups.push(cur);} else cur.n++; });
-  const groupRow=`<tr class="groups"><th class="blank" colspan="3"></th>${groups.map(g=>`<th colspan="${g.n}" style="background:${modColor(g.grp)}" title="${escHtml(modById[g.grp].n)}">${modById[g.grp].icon}</th>`).join("")}<th class="blank"></th></tr>`;
-  const colRow=`<tr><th>Plant</th><th>Workspace</th><th>Stage</th>${cols.map((f,i)=>{ const div=(i>0&&cols[i-1].grp!==f.grp)?"group-div":""; return `<th class="center ${div}" title="${escHtml(f.key)}">${escHtml(f.short)}</th>`; }).join("")}<th class="center group-div">Coverage</th></tr>`;
-  document.getElementById("tableHead").innerHTML=groupRow+colRow;
+  const groupSpans=`<tr class="groups">
+    <th class="blank" colspan="3"></th>
+    <th class="gh-client" colspan="${clientBool.length}">Client</th>
+    <th class="gh-operator" colspan="${operatorFeats.length}">Operator</th>
+    <th class="gh-common" colspan="${commonFeats.length}">Common</th>
+    <th class="blank"></th>
+  </tr>`;
+  const colHead=`<tr>
+    <th>Plant</th><th>Workspace</th><th class="center">Reports</th>
+    ${cols.map((f,i)=>{
+      const div=(f===operatorFeats[0]||f===commonFeats[0])?"group-div":"";
+      return `<th class="center ${div}" title="${escHtml(f)}">${escHtml(shortName(f))}</th>`;
+    }).join("")}
+    <th class="center group-div">Coverage</th>
+  </tr>`;
+  document.getElementById("tableHead").innerHTML=groupSpans+colHead;
 
-  if(!rows.length){ document.getElementById("tableBody").innerHTML=`<tr><td colspan="${cols.length+4}"><div class="no-results"><div class="big">🔍</div>No plants match your filters.</div></td></tr>`; return; }
-
+  if(!rows.length){
+    document.getElementById("tableBody").innerHTML=`<tr><td colspan="${cols.length+4}"><div class="no-results"><div class="big">🔍</div>No plants match your filters.</div></td></tr>`;
+    return;
+  }
   document.getElementById("tableBody").innerHTML=rows.map(r=>{
-    const ad=adoptedCount(r), dn=denomCount(r), cp=pct(ad,dn), full=isFull(r);
-    const cells=cols.map((f,i)=>{
-      const div=(i>0&&cols[i-1].grp!==f.grp)?"group-div":"";
-      const s=featState(r,f);
-      let inner="";
-      if(f.freq){
-        inner = editMode
-          ? `<select class="reports-select" ${s==="locked"?"disabled":""} data-row="${r.rowIndex}" data-freq="1" onchange="handleReport(this)">${REPORT_FREQS.map(x=>`<option${r.reportsType===x?" selected":""}>${x}</option>`).join("")}</select>`
-          : (s==="locked" ? `<span class="lockmark" title="Analytics not licensed">🔒</span>` : `<span class="freq-pill" style="background:${r.reportsType!=="None"?"var(--client-pale)":"var(--line-soft)"};color:${r.reportsType!=="None"?"var(--client)":"var(--ink-faint)"}">${escHtml(r.reportsType)}</span>`);
-      } else if(s==="retired"){ inner=`<span class="dash" title="Retired in v2">–</span>`; }
-      else if(s==="locked"){ inner=`<span class="lockmark" title="${escHtml(modById[f.modules[f.modules.length-1]].n)} not licensed — upsell">🔒</span>`; }
-      else {
-        const cls = s==="adopted"?"adopted":(s==="gap"?"gap":"off");
-        const editable = editMode && s!=="locked";
-        inner=`<span class="cell ${editable?"editable":""}" ${editable?`onclick="handleDot(this)"`:""} data-row="${r.rowIndex}" data-key="${escHtml(f.key)}" data-on="${onFlag(r,f)}"><span class="dot ${cls}" style="--dc:${modColor(f.grp)}" title="${escHtml(f.key)}: ${s}"></span></span>`;
-      }
-      return `<td class="center ${div}">${inner}</td>`;
+    const cov=coverage(r), cp=covPct(r), full=cov===TOTAL_FEATS;
+    const reportsCell = `<span class="freq-pill" style="background:${r.reportsType!=="None"?"var(--client-pale)":"var(--line-soft)"};color:${r.reportsType!=="None"?"var(--client)":"var(--ink-faint)"}">${escHtml(r.reportsType)}</span>`;
+    const dots=cols.map((f)=>{
+      const on=!!r[f], gc=`var(--${featGroup(f)})`;
+      const div=(f===operatorFeats[0]||f===commonFeats[0])?"group-div":"";
+      return `<td class="center ${div}"><span class="dot ${on?"on":""}" style="--dc:${gc}" title="${escHtml(f)}: ${on?"ON":"OFF"}"></span></td>`;
     }).join("");
-    const stg=stageById[stageOf(r)];
     return `<tr>
-      <td class="plant-name"><span class="clickable" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span><span class="save-indicator" id="si-${r.rowIndex}"></span></td>
+      <td class="plant-name"><span class="clickable" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span></td>
       <td class="ws-name"><span class="clickable-ws" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span></td>
-      <td><span class="stage-pill" style="background:${stg.pale};color:${stg.c}"><span class="sd"></span>${stg.n}</span></td>
-      ${cells}
-      <td class="center group-div"><div class="cov"><div class="cov-bar"><div class="cov-fill ${full?"full":""}" data-w="${cp}"></div></div><span class="cov-txt ${full?"full":""}">${ad}/${dn}</span></div></td>
+      <td class="center">${reportsCell}</td>
+      ${dots}
+      <td class="center group-div"><div class="cov"><div class="cov-bar"><div class="cov-fill ${full?"full":""}" data-w="${cp}"></div></div><span class="cov-txt ${full?"full":""}">${cov}/${TOTAL_FEATS}</span></div></td>
     </tr>`;
   }).join("");
   animateBars(document.getElementById("tableBody"));
 }
+function shortName(f){
+  return f.replace("(Whatsapp)"," (WA)").replace("Dashboard Summary","Dash Summary").replace("Insight Digest","Insight Dig.").replace("Remote Control","Remote").replace("Floc Detector","Floc").replace("OCR Data Input","OCR").replace("Data Input","Data In");
+}
 function renderFoot(rows){
   document.getElementById("tableCount").textContent=`${rows.length} of ${records.length} plants`;
-  const ad=rows.reduce((s,r)=>s+adoptedCount(r),0), dn=rows.reduce((s,r)=>s+denomCount(r),0);
-  document.getElementById("tableFoot").textContent=`Showing ${rows.length} plants · ${pct(ad,dn)}% of licensed features adopted · coverage = adopted ÷ licensed · sorted high → low`;
-  const live=records.filter(r=>isLive(r)).length;
-  document.getElementById("footMsg").innerHTML= records.length ? `<b>${live}</b> of <b>${records.length}</b> plants have rolled out every module they're licensed for. 🌱` : "—";
+  const avg = rows.length ? pct(rows.reduce((s,r)=>s+coverage(r),0), rows.length*TOTAL_FEATS) : 0;
+  document.getElementById("tableFoot").textContent=`Showing ${rows.length} plants · average coverage ${avg}% · sorted by coverage (high → low)`;
+  // Peak-end: warm closing summary
+  const full=records.filter(r=>coverage(r)===TOTAL_FEATS).length;
+  document.getElementById("footMsg").innerHTML= records.length
+    ? `<b>${full}</b> of <b>${records.length}</b> plants are fully adopted. Keep going — you're closer than you think. 🌱`
+    : "—";
   const btn=document.getElementById("tableBtnCount"); if(btn) btn.textContent="("+rows.length+")";
   renderActiveFilters();
 }
-function renderActiveFilters(){
-  const el=document.getElementById("activeFilters"); if(!el) return;
-  const chips=[];
-  if(state.search)     chips.push(["Search",state.search]);
-  if(state.workspace)  chips.push(["Workspace",state.workspace]);
-  if(state.stage)      chips.push(["Stage",stageById[state.stage]?.n||state.stage]);
-  if(state.module)     chips.push(["Module",modById[state.module]?.n||state.module]);
-  if(state.feature)    chips.push(["Feature",state.feature]);
-  if(state.reportFreq) chips.push(["Report freq",state.reportFreq]);
-  if(state.preset!=="all") chips.push(["View",{worklist:"Rollout worklist",full:"Live",upsell:"Upsell targets"}[state.preset]||state.preset]);
-  el.innerHTML = chips.length
-    ? chips.map(c=>`<span class="af-chip"><b>${escHtml(c[0])}:</b> ${escHtml(String(c[1]))}</span>`).join("")+`<button class="af-clear" onclick="clearAllFilters()">✕ Clear all</button>`
-    : `<span class="af-none">Showing all plants — no filters applied.</span>`;
+
+// ══════════════════ Navigation ══════════════════
+function scrollToTable(){ goTable(); }
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-function clearAllFilters(){
-  state={search:"",workspace:"",module:"",feature:"",reportFreq:"",stage:"",preset:"all"};
-  ["search","tblSearch","workspaceFilter","moduleFilter","stageFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
-  render();
+function goHome(){ prevPage=null; showPage("pageHome"); render(); }
+function goWorkspace(wsName){
+  prevPage=null;
+  renderWorkspacePage(wsName);
+  showPage("pageWorkspace");
+}
+function goPlant(rowIndex, fromWs){
+  const rec=records.find(r=>r.rowIndex===rowIndex);
+  if(!rec) return;
+  prevPage = fromWs ? "workspace:"+rec.workspace : "home";
+  renderPlantPage(rec, fromWs);
+  showPage("pagePlant");
 }
 
-// ══════════ Navigation ══════════
+// ── Workspace page ──
+function renderWorkspacePage(wsName){
+  const ws=records.filter(r=>r.workspace===wsName);
+  const active=ws.filter(r=>coverage(r)>0).length;
+  const cAdopt=groupAdoption(ws,GROUPS[0].feats), oAdopt=groupAdoption(ws,GROUPS[1].feats);
+  document.getElementById("wsBreadcrumb").innerHTML=
+    `<span class="bc-item" onclick="goHome()">🏠 Overview</span><span class="bc-sep">›</span><span class="bc-item active">${escHtml(wsName)}</span>`;
+  const cards=[...ws].sort((a,b)=>covPct(b)-covPct(a)).map(r=>{
+    const cov=coverage(r), cp=covPct(r), full=cov===TOTAL_FEATS;
+    const dots=[...clientBool,...operatorFeats,...commonFeats].map(f=>`<span class="pcd" style="background:${r[f]?`var(--${featGroup(f)})`:"#d5deea"}" title="${escHtml(f)}"></span>`).join("");
+    return `<div class="plant-card ${full?"full":""}" onclick="goPlant(${r.rowIndex},true)">
+      ${full?'<span class="pc-crown">🏆</span>':''}
+      <div class="pc-name">${escHtml(r.plant)}</div>
+      <div class="pc-bar"><div class="pc-fill ${full?"full":""}" data-w="${cp}"></div></div>
+      <div class="pc-meta"><span>${cov}/${TOTAL_FEATS} features</span><span>${cp}%</span></div>
+      <div class="pc-dots">${dots}</div>
+    </div>`;
+  }).join("");
+  document.getElementById("wsContent").innerHTML=`
+    <div class="dd-header">
+      <div class="dd-eyebrow">Workspace</div>
+      <h2 class="dd-name">${escHtml(wsName)}</h2>
+      <div class="dd-stat-row">
+        <div class="dd-stat"><div class="n">${ws.length}</div><div class="l">Plants</div></div>
+        <div class="dd-stat"><div class="n">${active}</div><div class="l">Active</div></div>
+        <div class="dd-stat"><div class="n">${cAdopt}%</div><div class="l">Client adoption</div></div>
+        <div class="dd-stat"><div class="n">${oAdopt}%</div><div class="l">Operator adoption</div></div>
+      </div>
+    </div>
+    <div class="section-head" style="margin-top:6px"><h3>Plants in ${escHtml(wsName)}</h3><span class="hint">sorted by coverage</span></div>
+    <div class="plant-grid">${cards}</div>`;
+  document.getElementById("wsNavRow").innerHTML=`<button class="nav-home" onclick="goHome()">🏠 Overview</button>`;
+  animateBars(document.getElementById("wsContent"));
+}
+
+// ── Plant page (goal gradient + peak celebration) ──
+function renderPlantPage(r, fromWs){
+  const cov=coverage(r), cp=covPct(r), remaining=TOTAL_FEATS-cov, full=cov===TOTAL_FEATS;
+  document.getElementById("plantBreadcrumb").innerHTML=
+    `<span class="bc-item" onclick="goHome()">🏠 Overview</span>`+
+    (fromWs?`<span class="bc-sep">›</span><span class="bc-item" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span>`:"")+
+    `<span class="bc-sep">›</span><span class="bc-item active">${escHtml(r.plant)}</span>`;
+
+  const groupCards=GROUPS.map(g=>{
+    const on=g.feats.filter(f=>isOn(r,f)).length;
+    const rows=g.feats.map(f=>{
+      if(f==="Reports"){
+        return `<div class="fr"><span class="fr-name">Reports</span><span class="fr-val ${r.reportsType!=="None"?"on":"off"}">${escHtml(r.reportsType)}</span></div>`;
+      }
+      const onv=!!r[f];
+      return `<div class="fr"><span class="fr-name">${escHtml(f)}</span><span class="fr-val ${onv?"on":"off"}">${onv?"ON":"OFF"}</span></div>`;
+    }).join("");
+    return `<div class="fg-card" style="--g:var(--${g.key});--gp:var(--${g.key}-pale)">
+      <div class="fg-head"><span>${g.label}</span><span>${on}/${g.feats.length}</span></div>
+      <div class="fg-body">${rows}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("plantContent").innerHTML=`
+    <div class="dd-header">
+      <div class="dd-eyebrow">${escHtml(r.workspace)}</div>
+      <h2 class="dd-name">${escHtml(r.plant)} ${full?"🏆":""}</h2>
+      <div class="dd-stat-row">
+        <div class="dd-stat"><div class="n">${cov}/${TOTAL_FEATS}</div><div class="l">Total coverage</div></div>
+        <div class="dd-stat"><div class="n">${GROUPS[0].feats.filter(f=>isOn(r,f)).length}/${GROUPS[0].feats.length}</div><div class="l">Client-side</div></div>
+        <div class="dd-stat"><div class="n">${GROUPS[1].feats.filter(f=>isOn(r,f)).length}/${GROUPS[1].feats.length}</div><div class="l">Operator-side</div></div>
+        <div class="dd-stat"><div class="n">${r.reportsType}</div><div class="l">Report cadence</div></div>
+      </div>
+    </div>
+    <div class="cov-ring-wrap">
+      <div class="cov-ring">${ring(cp,88,9,full?"var(--gold)":"var(--client)","var(--line-soft)")}<div class="cr-label">${cp}%</div></div>
+      <div class="cov-info">
+        <div class="ci-title">Feature coverage for ${escHtml(r.plant)}</div>
+        <div class="ci-goal ${full?"done":""}">${full?`🎉 <b>Fully adopted!</b> All ${TOTAL_FEATS} features are live — this is the benchmark for every other plant.`:`<b>${remaining}</b> feature${remaining===1?"":"s"} to go until full coverage. ${remaining<=3?"So close — a quick win is within reach.":"Every switch you flip closes the gap."}`}</div>
+      </div>
+    </div>
+    <div class="feat-detail-grid">${groupCards}</div>`;
+
+  let nav=`<button class="nav-home" onclick="goHome()">🏠 Overview</button>`;
+  if(fromWs) nav=`<button class="nav-back" onclick="goWorkspace('${esc(r.workspace)}')">← Back to ${escHtml(r.workspace)}</button>`+nav;
+  document.getElementById("plantNavRow").innerHTML=nav;
+  animateRings(document.getElementById("plantContent"));
+}
+
+// ══════════════════ Table page + search autocomplete ══════════════════
 function syncSearchInputs(){ const s=document.getElementById("search"), t=document.getElementById("tblSearch"); if(s)s.value=state.search; if(t)t.value=state.search; }
 function goTable(){ prevPage=null; hideSearchDropdown(); syncSearchInputs(); renderTable(getFiltered()); renderFoot(getFiltered()); showPage("pageTable"); }
-function scrollToTable(){ goTable(); }
-// ── search autocomplete ──
 function hl(s,q){ const i=s.toLowerCase().indexOf(q); if(i<0) return escHtml(s); return escHtml(s.slice(0,i))+"<mark>"+escHtml(s.slice(i,i+q.length))+"</mark>"+escHtml(s.slice(i+q.length)); }
 function hideSearchDropdown(){ const d=document.getElementById("searchDropdown"); if(d) d.classList.remove("open"); }
 function buildSearchDropdown(q){
@@ -918,174 +878,55 @@ function buildSearchDropdown(q){
   drop.innerHTML=h; drop.classList.add("open");
 }
 function selectWorkspaceAc(w){ hideSearchDropdown(); goWorkspace(w); }
-function showPage(id){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(id).classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
-function goHome(){ prevPage=null; hideSearchDropdown(); showPage("pageHome"); render(); }
-function goWorkspace(ws){ prevPage=null; renderWorkspacePage(ws); showPage("pageWorkspace"); }
-function goPlant(rowIndex,fromWs){ const r=records.find(x=>x.rowIndex===rowIndex); if(!r) return; prevPage=fromWs?"workspace:"+r.workspace:"home"; renderPlantPage(r,fromWs); showPage("pagePlant"); }
-
-function renderWorkspacePage(ws){
-  const list=records.filter(r=>r.workspace===ws);
-  const ad=list.reduce((s,r)=>s+adoptedCount(r),0), dn=list.reduce((s,r)=>s+denomCount(r),0);
-  const gaps=list.reduce((s,r)=>s+gapCount(r),0), ups=list.reduce((s,r)=>s+upsellMods(r).length,0);
-  document.getElementById("wsBreadcrumb").innerHTML=`<span class="bc-item" onclick="goHome()">🏠 Overview</span><span class="bc-sep">›</span><span class="bc-item active">${escHtml(ws)}</span>`;
-  const cards=[...list].sort((a,b)=>covPct(b)-covPct(a)).map(r=>{
-    const a=adoptedCount(r), d=denomCount(r), cp=pct(a,d), full=isFull(r);
-    const dots=activeFeatures.map(f=>{ const s=featState(r,f); const bg=s==="adopted"?modColor(f.grp):(s==="gap"?"var(--flag)":(s==="locked"?"var(--lock)":"#d5deea")); return `<span class="pcd" style="background:${bg}" title="${escHtml(f.short)}: ${s}"></span>`; }).join("");
-    const stg=stageById[stageOf(r)];
-    return `<div class="plant-card ${full?"full":""}" onclick="goPlant(${r.rowIndex},true)">${full?'<span class="pc-crown">🏆</span>':''}
-      <div class="pc-name">${escHtml(r.plant)}</div>
-      <div class="pc-bar"><div class="pc-fill ${full?"full":""}" data-w="${cp}"></div></div>
-      <div class="pc-meta"><span>${a}/${d} adopted</span><span>${cp}%</span></div>
-      <div class="pc-dots">${dots}</div>
-      <div style="margin-top:10px"><span class="stage-pill" style="background:${stg.pale};color:${stg.c}"><span class="sd"></span>${stg.n}</span></div></div>`;
-  }).join("");
-  document.getElementById("wsContent").innerHTML=`
-    <div class="dd-header"><div class="dd-eyebrow">Workspace</div><h2 class="dd-name">${escHtml(ws)}</h2>
-      <div class="dd-stat-row">
-        <div class="dd-stat"><div class="n">${list.length}</div><div class="l">Plants</div></div>
-        <div class="dd-stat"><div class="n">${pct(ad,dn)}%</div><div class="l">Adoption of licensed</div></div>
-        <div class="dd-stat"><div class="n">${gaps}</div><div class="l">Adoption gaps</div></div>
-        <div class="dd-stat"><div class="n">${ups}</div><div class="l">Upsell surface</div></div>
-      </div></div>
-    <div class="section-head" style="margin-top:6px"><h3>Plants in ${escHtml(ws)}</h3><span class="hint">sorted by adoption</span></div>
-    <div class="plant-grid">${cards}</div>`;
-  document.getElementById("wsNavRow").innerHTML=`<button class="nav-home" onclick="goHome()">🏠 Overview</button>`;
-  animateBars(document.getElementById("wsContent"));
+function renderActiveFilters(){
+  const el=document.getElementById("activeFilters"); if(!el) return;
+  const chips=[];
+  if(state.search)     chips.push(["Search",state.search]);
+  if(state.workspace)  chips.push(["Workspace",state.workspace]);
+  if(state.feature)    chips.push(["Feature",state.feature]);
+  if(state.reportFreq) chips.push(["Report freq",state.reportFreq]);
+  if(state.preset!=="all") chips.push(["View",{attention:"Needs attention",zero:"Zero features",full:"Fully adopted"}[state.preset]||state.preset]);
+  el.innerHTML = chips.length
+    ? chips.map(c=>`<span class="af-chip"><b>${escHtml(c[0])}:</b> ${escHtml(String(c[1]))}</span>`).join("")+`<button class="af-clear" onclick="clearAllFilters()">✕ Clear all</button>`
+    : `<span class="af-none">Showing all plants — no filters applied.</span>`;
+}
+function clearAllFilters(){
+  state={search:"",workspace:"",feature:"",reportFreq:"",preset:"all"};
+  ["search","tblSearch","workspaceFilter","featureFilter","reportFreqFilter"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  render();
 }
 
-function renderPlantPage(r,fromWs){
-  const ad=adoptedCount(r), dn=denomCount(r), cp=pct(ad,dn), gaps=gapCount(r), full=isFull(r);
-  const ups=upsellMods(r);
-  document.getElementById("plantBreadcrumb").innerHTML=`<span class="bc-item" onclick="goHome()">🏠 Overview</span>`+(fromWs?`<span class="bc-sep">›</span><span class="bc-item" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span>`:"")+`<span class="bc-sep">›</span><span class="bc-item active">${escHtml(r.plant)}</span>`;
-
-  const cards=MODULES.map(m=>{
-    const feats=FEATURES.filter(f=>f.grp===m.id);
-    if(!feats.length) return "";
-    const licensed = m.always || (m.id==="floc" ? feats.some(f=>onFlag(r,f)) : entitlement(r).has(m.id));
-    const rowsHtml=feats.map(f=>{
-      const s=featState(r,f);
-      let badge;
-      if(s==="retired") badge=`<span class="fr-val locked">retired</span>`;
-      else if(s==="locked") badge=`<span class="fr-val locked">🔒 not licensed</span>`;
-      else if(f.freq) badge=`<span class="fr-val ${s==="gap"?"gap":"adopted"}">${escHtml(r.reportsType)}</span>`;
-      else{
-        const on=onFlag(r,f); const cls=s==="adopted"?"adopted":(s==="gap"?"gap":"off");
-        const label=f.type==="entitlement"?(on?"INSTALLED":"NOT INSTALLED"):(on?"ON":"OFF");
-        const clickable = editMode && s!=="locked" && s!=="retired";
-        badge=`<span class="fr-val ${cls} ${clickable?"fr-toggle":""}" ${clickable?`onclick="handleDotRow(this,${r.rowIndex},'${esc(f.key)}',${!on})"`:""}>${label}</span>`;
-      }
-      const tt=f.type!=="gated"?`<span class="type-tag">${TYPE_LABEL[f.type]}</span>`:"";
-      return `<div class="fr"><span class="fr-name">${escHtml(f.short)}${tt}</span>${badge}</div>`;
-    }).join("");
-    const ms=moduleStage(r,m);
-    const stageChip = (licensed && ms!=="not_licensed") ? `<span class="md-stage" style="background:${stageById[ms].pale};color:${stageById[ms].c}">${stageById[ms].n}</span>` : `<span class="md-lic off">NOT LICENSED</span>`;
-    return `<div class="md-card ${licensed?"":"locked"}" style="--g:${modColor(m.id)};--gp:var(--m-${m.id}-pale)">
-      <div class="md-head"><span>${m.icon} ${escHtml(m.n)}</span>${stageChip}</div>
-      <div class="md-body">${rowsHtml}</div></div>`;
-  }).join("");
-
-  const stg=stageOf(r), sIdx=stageIndex[stg];
-  const stepper=`<div class="stepper">`+STAGES.map((s,i)=>{
-    const cls=i<sIdx?"done":(i===sIdx?"current":"");
-    const mark=i<sIdx?"✓":(i+1);
-    const line=i>0?`<div class="step-line ${i<=sIdx?"done":""}"></div>`:"";
-    return `${line}<div class="step ${cls}" style="--cc:${s.c};--ccp:${s.pale}"><span class="sc">${mark}</span><span class="st-l">${s.n}</span></div>`;
-  }).join("")+`</div>`;
-  const unprov=unprovisionedModules(r), gapsN=gapCount(r);
-  let nba;
-  if(stg==="not_started") nba=`🚀 <b>Kick off this plant.</b> No modules provisioned yet — start with <b>${unprov.slice(0,3).join(", ")}</b>${unprov.length>3?` +${unprov.length-3} more`:""}.`;
-  else if(stg==="in_progress") nba=`🛠 <b>${unprov.length} module${unprov.length===1?"":"s"} to reach Live:</b> ${unprov.slice(0,4).join(", ")}${unprov.length>4?` +${unprov.length-4} more`:""}.${gapsN?` Then close <b>${gapsN}</b> feature gap${gapsN===1?"":"s"} for full depth.`:""}`;
-  else if(stg==="live") nba=`📈 <b>All licensed modules are live.</b>${gapsN?` <b>${gapsN}</b> feature gap${gapsN===1?"":"s"} remain for full depth.`:""} Next: confirm real usage to reach <b>Healthy</b> (usage data — PostHog, Phase 4).`;
-  else nba=`🎉 <b>Healthy.</b> Every licensed module rolled out and actively used — the benchmark for every other plant.`;
-  document.getElementById("plantContent").innerHTML=`
-    <div class="dd-header"><div class="dd-eyebrow">${escHtml(r.workspace)}</div><h2 class="dd-name">${escHtml(r.plant)} ${full?"🏆":""}</h2>
-      <div class="dd-stat-row">
-        <div class="dd-stat"><div class="n">${ad}/${dn}</div><div class="l">Adopted of licensed</div></div>
-        <div class="dd-stat"><div class="n">${gaps}</div><div class="l">Adoption gaps</div></div>
-        <div class="dd-stat"><div class="n">${ups.length}</div><div class="l">Modules to upsell</div></div>
-        <div class="dd-stat"><div class="n">${r.reportsType}</div><div class="l">Report cadence</div></div>
-      </div></div>
-    <div class="cov-ring-wrap">
-      <div style="flex:1 1 100%"><div class="ci-title" style="margin-bottom:8px">Implementation stage</div>${stepper}<div class="nba">${nba}</div></div>
-    </div>
-    <div class="cov-ring-wrap">
-      <div class="cov-ring">${ring(cp,88,9,full?"var(--gold)":"var(--good)","var(--line-soft)")}<div class="cr-label">${cp}%</div></div>
-      <div class="cov-info">
-        <div class="ci-title">Adoption of licensed features — ${escHtml(r.plant)}</div>
-        <div class="ci-goal ${full?"done":""}">${full?`🎉 <b>Fully adopted!</b> Everything this plant is licensed for is switched on.`:`<b>${gaps}</b> licensed feature${gaps===1?"":"s"} still off. ${gaps&&gaps<=3?"A quick win is within reach.":"Each one you enable closes the gap."}`}</div>
-        ${ups.length?`<div class="ci-up">🛒 Upsell: ${ups.map(id=>modById[id].icon+" "+modById[id].n).join(" · ")}</div>`:""}
-      </div></div>
-    <div class="mod-detail">${cards}</div>`;
-  let nav=`<button class="nav-home" onclick="goHome()">🏠 Overview</button>`;
-  if(fromWs) nav=`<button class="nav-back" onclick="goWorkspace('${esc(r.workspace)}')">← Back to ${escHtml(r.workspace)}</button>`+nav;
-  document.getElementById("plantNavRow").innerHTML=nav;
-  animateRings(document.getElementById("plantContent"));
-}
-
-// ══════════ Edit handlers ══════════
-function afterEdit(r){ delete r.__ent; renderHero(); }
-function handleDot(el){
-  if(!editMode) return;
-  const rowIndex=+el.dataset.row, key=el.dataset.key, newVal=el.dataset.on!=="true";
-  const r=records.find(x=>x.rowIndex===rowIndex); if(r) r[key]=newVal;
-  saveField(rowIndex,key,newVal,document.getElementById(`si-${rowIndex}`));
-  afterEdit(r); renderTable(getFiltered());
-}
-function handleReport(el){
-  const rowIndex=+el.dataset.row, v=el.value;
-  const r=records.find(x=>x.rowIndex===rowIndex); if(r) r.reportsType=v;
-  saveField(rowIndex,"Reports",v,document.getElementById(`si-${rowIndex}`));
-  afterEdit(r); renderTable(getFiltered());
-}
-function handleDotRow(el,rowIndex,key,newVal){
-  if(!editMode) return;
-  const r=records.find(x=>x.rowIndex===rowIndex); if(r) r[key]=newVal;
-  saveField(rowIndex,key,newVal,null);
-  delete r.__ent; renderPlantPage(r, prevPage&&prevPage.startsWith("workspace:"));
-}
-
-// ══════════ Auth ══════════
-function openEditModal(){ if(isAdmin){ exitEditMode(); return; } document.getElementById("pwInput").value=""; document.getElementById("pwError").textContent=""; document.getElementById("authModal").classList.remove("hidden"); setTimeout(()=>document.getElementById("pwInput").focus(),80); }
-function closeModal(){ document.getElementById("authModal").classList.add("hidden"); document.getElementById("pwInput").value=""; document.getElementById("pwError").textContent=""; }
-function togglePwVisibility(){ const i=document.getElementById("pwInput"),e=document.getElementById("eyeBtn"); if(i.type==="password"){i.type="text";e.textContent="🙈";}else{i.type="password";e.textContent="👁";} }
-function submitPassword(){ const pw=document.getElementById("pwInput").value; if(!pw){document.getElementById("pwError").textContent="Please enter a password.";return;} if(pw===ADMIN_PASSWORD){closeModal();enterEditMode();}else{document.getElementById("pwError").textContent="Incorrect password. Try again.";const i=document.getElementById("pwInput");i.classList.add("shake");i.addEventListener("animationend",()=>i.classList.remove("shake"),{once:true});} }
-function setBadges(t,on){ ["adminBadge","adminBadge2"].forEach(id=>{const b=document.getElementById(id);if(b){b.textContent=t;b.classList.toggle("on",on);}}); }
-function enterEditMode(){ isAdmin=true;editMode=true;document.body.classList.add("edit-mode");const b=document.getElementById("editToggle");b.classList.add("active");b.textContent="✏ Exit Edit Mode";setBadges("ADMIN",true);document.getElementById("editHint").style.display="block";toast("🔓 Edit Mode unlocked","good");render(); }
-function exitEditMode(){ isAdmin=false;editMode=false;document.body.classList.remove("edit-mode");const b=document.getElementById("editToggle");b.classList.remove("active");b.textContent="✏ Edit Mode";setBadges("VIEWER",false);document.getElementById("editHint").style.display="none";render(); }
-document.getElementById("authModal").addEventListener("click",function(e){ if(e.target===this) closeModal(); });
-
-// ══════════ CSV ══════════
+// ══════════════════ CSV export ══════════════════
 function exportCSV(){
   const rows=getFiltered();
-  const head=["plant","workspace","stage","licensed_modules","adopted","licensed_total","coverage_pct","gaps","upsell_modules",...activeFeatures.map(f=>f.short+"_state")];
-  const body=rows.map(r=>{
-    const lic=[...entitlement(r)].filter(m=>m!=="core");
-    const base=[`"${(r.plant||"").replace(/"/g,'""')}"`,`"${(r.workspace||"").replace(/"/g,'""')}"`,stageById[stageOf(r)].n,`"${lic.join(" ")}"`,adoptedCount(r),denomCount(r),covPct(r),gapCount(r),`"${upsellMods(r).join(" ")}"`];
-    const states=activeFeatures.map(f=>featState(r,f));
-    return base.concat(states).join(",");
-  }).join("\n");
-  const blob=new Blob([head.join(",")+"\n"+body],{type:"text/csv"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="digital_paani_adoption.csv"; a.click();
+  const cols=["plant","workspace","reportsType",...allBool,"coverage"];
+  const body=rows.map(r=>cols.map(c=>{
+    if(c==="coverage") return coverage(r)+"/"+TOTAL_FEATS;
+    const v=r[c];
+    return typeof v==="boolean" ? (v?"TRUE":"FALSE") : `"${String(v||"").replace(/"/g,'""')}"`;
+  }).join(",")).join("\n");
+  const blob=new Blob([cols.join(",")+"\n"+body],{type:"text/csv"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="digital_paani_features.csv"; a.click();
   toast("⬇ CSV exported");
 }
 
-// ══════════ Events ══════════
+// ══════════════════ Filter events ══════════════════
 function toggleAdvanced(){ document.getElementById("advanced").classList.toggle("open"); }
 let searchTimer;
-document.getElementById("search").addEventListener("input",e=>{ state.search=e.target.value; buildSearchDropdown(e.target.value); const t=document.getElementById("tblSearch"); if(t)t.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(render,140); });
-document.getElementById("search").addEventListener("focus",e=>buildSearchDropdown(e.target.value));
-document.getElementById("search").addEventListener("keydown",e=>{ if(e.key==="Enter"){ hideSearchDropdown(); goTable(); } });
-document.getElementById("tblSearch").addEventListener("input",e=>{ state.search=e.target.value; const s=document.getElementById("search"); if(s)s.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ renderTable(getFiltered()); renderFoot(getFiltered()); },140); });
-document.addEventListener("click",e=>{ if(!e.target.closest(".search-box")) hideSearchDropdown(); });
+const searchEl=document.getElementById("search");
+searchEl.addEventListener("input",e=>{ state.search=e.target.value; buildSearchDropdown(e.target.value); const t=document.getElementById("tblSearch"); if(t)t.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(render,140); });
+searchEl.addEventListener("focus",e=>buildSearchDropdown(e.target.value));
+searchEl.addEventListener("keydown",e=>{ if(e.key==="Enter"){ hideSearchDropdown(); goTable(); } });
+document.getElementById("tblSearch").addEventListener("input",e=>{ state.search=e.target.value; if(searchEl)searchEl.value=e.target.value; clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ renderTable(getFiltered()); renderFoot(getFiltered()); },140); });
 document.getElementById("workspaceFilter").addEventListener("change",e=>{ state.workspace=e.target.value; render(); });
-document.getElementById("moduleFilter").addEventListener("change",e=>{ state.module=e.target.value; render(); });
-document.getElementById("stageFilter").addEventListener("change",e=>{ state.stage=e.target.value; if(state.stage) state.preset="all"; render(); });
 document.getElementById("featureFilter").addEventListener("change",e=>{ state.feature=e.target.value; render(); });
 document.getElementById("reportFreqFilter").addEventListener("change",e=>{ state.reportFreq=e.target.value; render(); });
 document.getElementById("resetBtn").addEventListener("click",()=>{ clearAllFilters(); });
+document.addEventListener("click",e=>{ if(!e.target.closest(".search-box")) hideSearchDropdown(); });
+// "/" focuses the visible search, Esc closes the autocomplete
 document.addEventListener("keydown",e=>{
-  if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="SELECT"){ e.preventDefault(); const onTable=document.getElementById("pageTable").classList.contains("active"); document.getElementById(onTable?"tblSearch":"search").focus(); }
-  if(e.key==="Escape"){ hideSearchDropdown(); if(!document.getElementById("authModal").classList.contains("hidden"))closeModal(); }
+  if(e.key==="/" && document.activeElement.tagName!=="INPUT" && document.activeElement.tagName!=="SELECT"){ e.preventDefault(); const onTable=document.getElementById("pageTable").classList.contains("active"); document.getElementById(onTable?"tblSearch":"search").focus(); }
+  if(e.key==="Escape"){ hideSearchDropdown(); }
 });
 
 loadData();
