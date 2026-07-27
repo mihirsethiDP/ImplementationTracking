@@ -1,5 +1,14 @@
 # Improvement proposal — align the Adoption Console with the CloseTheLoop v2 model
 
+> **Status note (company launch):** The live site is currently a **view-only,
+> real-data-only** adoption dashboard (adoption by area, per-feature adoption,
+> coverage) plus autocomplete search and a dedicated table page. Entitlement
+> (Phase 1) and lifecycle (Phase 2) were **built and then rolled back for the
+> company-wide launch** because they relied on mocked data and a public admin
+> password. That code is preserved in git history (commits `342071c`, `57adfff`,
+> `1b6d5fc`) and should return once a **real entitlement source** is wired. The
+> plan below still stands as the path back.
+
 Context taken from `D:/Roles` (CloseTheLoop v2 Roles & Permissions / "Role Studio").
 That project defines the **product-module entitlement model** our adoption tracker
 is currently missing.
@@ -170,7 +179,7 @@ console and Role Studio read as two views of one system.
 ## Suggested phased rollout (trackable)
 
 - [x] **Phase 0 — Align taxonomy**: feature→module mapping grounded in `SETS`/`coverage-map.csv`; 2 open items remain (WhatsApp delivery, OCR sub-feature).
-- [x] **Phase 1 — Entitlement-aware UI** *(shipped, entitlements mocked)*: config-driven mapping, 8 modules, three feature types, four cell states, coverage = adopted ÷ licensed, Gap + Upsell KPIs, module grouping.
-- [x] **Phase 2 — Implementation lifecycle** *(shipped, health mocked)*: Not started → In progress → Live → Healthy pipeline, per-plant stage, rollout worklist, plant-page stepper + next-best-action.
-- [ ] **Phase 3 — Wire real entitlement source**: replace the mocked `entitlement()` (and later `mockHealthy()`); decide sheet columns vs `Entitlements` tab vs v2 backend.
+- [~] **Phase 1 — Entitlement-aware UI** *(built, then rolled back for launch — mocked)*: config-driven mapping, 8 modules, three feature types, four cell states, coverage = adopted ÷ licensed, Gap + Upsell KPIs, module grouping. In git history at `342071c`.
+- [~] **Phase 2 — Implementation lifecycle** *(built, then rolled back for launch — mocked)*: Not started → In progress → Live → Healthy pipeline, per-plant stage, rollout worklist, plant-page stepper + next-best-action. In git history at `57adfff`.
+- [ ] **Phase 3 — Wire real entitlement source, then restore Phases 1–2**: replace the mocked `entitlement()` (and later `mockHealthy()`); decide sheet columns vs `Entitlements` tab vs v2 backend. Restoring is a cherry-pick + swap of the mock function.
 - [ ] **Phase 4 — Usage** (depends on product instrumentation): PostHog funnel per module → real `Healthy` stage.
