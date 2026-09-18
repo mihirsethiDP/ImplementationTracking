@@ -47,6 +47,13 @@ is hard-coded in the dashboard:
   and drill-downs, and count toward every coverage/implementation %.
 - **New row → new plant**, and **new workspace value → new workspace** — both flow
   through with no code change.
+- **Active/Inactive status.** A column whose values are only `Active`/`Inactive` is
+  auto-detected (by its values, so the header name can be anything), treated as
+  **status — not a feature**, and excluded from the feature counts. **Inactive
+  plants** (churned / contract ended) are **excluded by default** from every metric,
+  the table, and workspace roll-ups; a **Status filter** (Active only / Inactive only
+  / All) lets you see them, and inactive plants are badged. A blank status counts as
+  active.
 - **Dependency:** this only works end-to-end if the **Apps Script returns the new
   column** in its JSON. The script is header-driven (it preserves exact column
   names), so new boolean columns should flow through automatically — but confirm by

@@ -331,6 +331,12 @@ footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);font-si
         <input type="text" id="plantSearch" placeholder="Search plant…" autocomplete="off" oninput="handlePlantInput(this.value)" onfocus="handlePlantInput(this.value)">
         <div class="ac-dropdown" id="plantDropdown"></div>
       </div>
+      <span id="statusWrap"><span class="f-label">Status</span>
+        <select id="statusFilter" onchange="state.status=this.value;render();">
+          <option value="active">Active only</option>
+          <option value="inactive">Inactive only</option>
+          <option value="all">All</option>
+        </select></span>
       <button class="reset-btn" id="resetBtn">↺ Reset</button>
     </section>
 
@@ -447,16 +453,21 @@ document.getElementById("logoImg").src = "data:image/png;base64,iVBORw0KGgoAAAAN
 // sheet and it appears here automatically (see populateFilters). META_FIELDS is
 // everything that is NOT a feature. "Reports" is a feature too (cadence column).
 const META_FIELDS = ["rowIndex","workspace","plant","reportsType"];
-let FEATURES = [];   // boolean feature columns, in sheet order
+let FEATURES = [];        // boolean feature columns, in sheet order
+let STATUS_FIELD = null;  // auto-detected Active/Inactive column (excluded from features)
 const REPORT_FREQS = ["Daily","Weekly","Monthly","All","None"];
 const FREQ_COLORS  = {Daily:"#0c8a7a",Weekly:"#2f8f8f",Monthly:"#6fb8b8",All:"#43a6a6",None:"#d0dae6"};
 
 let records  = [];
-let state    = {workspace:"",search:"",feature:"",reportFreq:""};
+let state    = {workspace:"",search:"",feature:"",reportFreq:"",status:"active"};
 
 // ── Feature helpers (Reports "on" = any cadence other than None) ──
 function totalFeatures(){ return FEATURES.length + 1; }               // +1 for Reports
 function coverageOf(r){ return FEATURES.filter(f=>r[f]).length + (r.reportsType!=="None"?1:0); }
+// ── Plant status: inactive = churned / contract ended → excluded by default ──
+function isActive(r){ if(!STATUS_FIELD) return true; return String(r[STATUS_FIELD]==null?"":r[STATUS_FIELD]).trim().toLowerCase()!=="inactive"; }
+function statusMatch(r){ if(!STATUS_FIELD||state.status==="all") return true; return state.status==="active" ? isActive(r) : !isActive(r); }
+function inactiveCount(){ return STATUS_FIELD ? records.filter(r=>!isActive(r)).length : 0; }
 
 // ── Table page ───────────────────────────────────────────────
 function goTable(){
@@ -603,15 +614,28 @@ function showError(msg){
 
 // ── Filters ───────────────────────────────────────────────────
 function populateFilters(){
-  // Discover feature columns from the sheet (anything that isn't a meta field).
-  FEATURES = records.length ? Object.keys(records[0]).filter(k=>!META_FIELDS.includes(k)) : [];
-  const wsSet=[...new Set(records.map(r=>r.workspace))].sort();
-  document.getElementById("topMeta").textContent=`${records.length} plants · ${wsSet.length} workspaces · ${totalFeatures()} features`;
+  const keys = records.length ? Object.keys(records[0]) : [];
+  // Auto-detect a status column: a non-meta column whose values are only Active/Inactive/blank
+  // (works regardless of the exact header name).
+  STATUS_FIELD = keys.find(k=>{
+    if(META_FIELDS.includes(k)) return false;
+    const vals=records.map(r=>String(r[k]==null?"":r[k]).trim().toLowerCase()).filter(v=>v!=="");
+    return vals.length>0 && vals.every(v=>v==="active"||v==="inactive");
+  }) || null;
+  // Features = everything that isn't a meta field or the status column.
+  FEATURES = keys.filter(k=>!META_FIELDS.includes(k) && k!==STATUS_FIELD);
+  const activeRecs=records.filter(isActive);
+  const wsSet=[...new Set(activeRecs.map(r=>r.workspace))].sort();
+  const inact=inactiveCount();
+  document.getElementById("topMeta").textContent=`${activeRecs.length} active plants · ${wsSet.length} workspaces · ${totalFeatures()} features`+(inact?` · ${inact} inactive`:"");
+  const sw=document.getElementById("statusWrap"); if(sw) sw.style.display = STATUS_FIELD ? "" : "none";
+  const sf=document.getElementById("statusFilter"); if(sf) sf.value = state.status;
 }
 function getFiltered(){
   const tp=(document.getElementById("tblPlantSearch")||{value:""}).value.toLowerCase();
   const tw=(document.getElementById("tblWsSearch")||{value:""}).value.toLowerCase();
   return records.filter(r=>{
+    if(!statusMatch(r)) return false;
     if(state.workspace && !r.workspace.toLowerCase().includes(state.workspace.toLowerCase())) return false;
     if(state.search    && !r.plant.toLowerCase().includes(state.search.toLowerCase())) return false;
     if(state.feature){
@@ -638,7 +662,7 @@ function renderStats(filtered){
   const overall=pct(implemented,possible);
   const zero=filtered.filter(r=>coverageOf(r)===0).length;
   document.getElementById("statRow").innerHTML=[
-    {num:total,lbl:"Plants in view",sub:total!==records.length?`of ${records.length} total`:"all plants"},
+    {num:total,lbl:"Plants in view",sub:(state.status==="active"&&inactiveCount())?`${inactiveCount()} inactive excluded`:(total!==records.length?`of ${records.length} total`:"all plants")},
     {num:wsCount,lbl:"Workspaces",sub:"client groups"},
     {num:overall+"%",lbl:"Overall implementation",sub:`${implemented}/${possible} feature slots`},
     {num:totalFeatures(),lbl:"Features tracked",sub:"from the sheet"},
@@ -751,7 +775,7 @@ function renderTable(filtered){
     const covCls=pct(on,tot)>=50?"hi":pct(on,tot)>=20?"mid":"lo";
     const reportsCell=`<span class="score-pill ${fp[r.reportsType]}">${r.reportsType}</span>`;
     let cells=`
-      <td class="plant-name"><span class="clickable-plant" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span></td>
+      <td class="plant-name"><span class="clickable-plant" onclick="goPlant(${r.rowIndex},false)">${escHtml(r.plant)}</span>${(STATUS_FIELD&&!isActive(r))?` <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#b3473f;border:1px solid #e0b0ae;border-radius:4px;padding:1px 5px;">INACTIVE</span>`:""}</td>
       <td class="workspace-name"><span class="clickable-ws" onclick="goWorkspace('${esc(r.workspace)}')">${escHtml(r.workspace)}</span></td>
       <td class="center col-divider">${reportsCell}</td>`;
     colOrder.forEach((f)=>{
@@ -767,7 +791,7 @@ function renderTable(filtered){
 
 // ── Workspace page ────────────────────────────────────────────
 function renderWorkspacePage(wsName){
-  const ws=records.filter(r=>r.workspace===wsName);
+  const ws=records.filter(r=>r.workspace===wsName && statusMatch(r));
   const total=ws.length;
   const implemented=ws.reduce((s,r)=>s+coverageOf(r),0);
   const possible=total*totalFeatures();
@@ -833,7 +857,7 @@ function renderPlantPage(r){
   document.getElementById("plantContent").innerHTML=`
     <div class="plant-header">
       <div class="ph-ws">${escHtml(r.workspace)}</div>
-      <div class="ph-name">${escHtml(r.plant)}</div>
+      <div class="ph-name">${escHtml(r.plant)}${STATUS_FIELD?` <span style="font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;vertical-align:middle;margin-left:8px;background:${isActive(r)?"rgba(46,184,168,.2)":"#b3473f"};color:${isActive(r)?"#8fe0d3":"#fff"};">${isActive(r)?"ACTIVE":"INACTIVE — not serviced"}</span>`:""}</div>
       <div class="plant-header-stats">
         <div class="phs"><div class="phsn">${on}/${tot}</div><div class="phsl">Features implemented</div></div>
         <div class="phs"><div class="phsn">${covPct}%</div><div class="phsl">Overall coverage</div></div>
@@ -862,7 +886,7 @@ function renderPlantPage(r){
 // ── CSV export ────────────────────────────────────────────────
 function exportCSV(){
   const filtered=getFiltered();
-  const cols=["plant","workspace","reportsType",...FEATURES];
+  const cols=["plant","workspace",...(STATUS_FIELD?[STATUS_FIELD]:[]),"reportsType",...FEATURES];
   const blob=new Blob([cols.join(",")+"\n"+filtered.map(r=>cols.map(c=>typeof r[c]==="boolean"?(r[c]?"TRUE":"FALSE"):`"${(r[c]||"").replace(/"/g,'""')}"`).join(",")).join("\n")],{type:"text/csv"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="digital_paani_features.csv";a.click();
 }
@@ -872,9 +896,10 @@ function exportCSV(){
 // plantSearch uses autocomplete — handled via handlePlantInput
 // workspaceSearch uses autocomplete — handled via handleWsInput
 document.getElementById("resetBtn").addEventListener("click",()=>{
-  state={workspace:"",search:"",feature:"",reportFreq:""};
+  state={workspace:"",search:"",feature:"",reportFreq:"",status:"active"};
   const ids=["workspaceSearch","plantSearch","featureFilter","reportFreqFilter","tblPlantSearch","tblWsSearch"];
   ids.forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  const sf=document.getElementById("statusFilter"); if(sf) sf.value="active";
   hideDropdown("wsDropdown"); hideDropdown("plantDropdown");
   render();
 });
